@@ -1,17 +1,22 @@
 package ca.unb.mobiledev.todolistapp
 
+import android.R
 import android.os.Bundle
-import com.google.android.material.appbar.CollapsingToolbarLayout
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ArrayAdapter
+import android.widget.ListView
+import androidx.appcompat.app.AppCompatActivity
 import ca.unb.mobiledev.todolistapp.databinding.ActivityScrollingBinding
+import com.google.android.material.snackbar.Snackbar
+
 
 class ScrollingActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityScrollingBinding
+    private var items: ArrayList<String>? = null
+    private var itemsAdapter: ArrayAdapter<String>? = null
+    private var lvItems: ListView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,9 +24,21 @@ class ScrollingActivity : AppCompatActivity() {
         binding = ActivityScrollingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(findViewById(R.id.toolbar))
+        lvItems = binding.listView as ListView
+        items = ArrayList<String>()
+        itemsAdapter = ArrayAdapter<String>(
+            this,
+            R.layout.simple_list_item_1, items!!
+        )
+        if (lvItems != null) {}
+
+        lvItems!!.setAdapter(itemsAdapter)
+        items!!.add("First Item")
+        items!!.add("Second Item")
+
+        setSupportActionBar(binding.toolbar)
         binding.toolbarLayout.title = title
-        binding.fab.setOnClickListener { view ->
+        binding.btnAdd.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
@@ -29,7 +46,7 @@ class ScrollingActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_scrolling, menu)
+//        menuInflater.inflate(R.menu, menu)
         return true
     }
 
@@ -38,9 +55,10 @@ class ScrollingActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
+//        return when (item.itemId) {
+//            R.id.action_settings -> true
+//            else -> super.onOptionsItemSelected(item)
+//        }
+        return true
     }
 }
