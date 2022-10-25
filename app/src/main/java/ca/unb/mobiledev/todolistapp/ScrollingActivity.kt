@@ -24,7 +24,7 @@ class ScrollingActivity : AppCompatActivity() {
         binding = ActivityScrollingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        lvItems = binding.listView as ListView
+        lvItems = binding.listView
         items = ArrayList<String>()
         itemsAdapter = ArrayAdapter<String>(
             this,

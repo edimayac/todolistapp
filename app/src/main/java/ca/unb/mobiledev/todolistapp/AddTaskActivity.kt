@@ -2,6 +2,7 @@ package ca.unb.mobiledev.todolistapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
@@ -18,8 +19,7 @@ class AddTaskActivity : AppCompatActivity() {
         val editText = findViewById<EditText>(R.id.editText)
 
         // Initializing the array lists and the adapter
-        var itemlist = arrayListOf<String>()
-        val title = itemlist.add(editText.text.toString())
+        val title = editText.text
 
 
         cancelButton.setOnClickListener() {
@@ -27,12 +27,12 @@ class AddTaskActivity : AppCompatActivity() {
         }
         saveButton.setOnClickListener() {
             val intent = Intent(this@AddTaskActivity, MainActivity::class.java)
-            intent.putExtra("title", title)
-            startActivity(intent)
-
-
+            intent.putExtra("title1", title.toString())
+            setResult(RESULT_OK, intent)
+            Log.e("check title", intent.getStringExtra("title1").toString())
+            finish()
+//            startActivity(intent)
         }
-
 
     }
 }
