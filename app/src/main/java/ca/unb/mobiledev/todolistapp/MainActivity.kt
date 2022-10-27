@@ -1,6 +1,5 @@
 package ca.unb.mobiledev.todolistapp
 
-import android.R.string
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 class MainActivity : AppCompatActivity() {
     private var itemList = arrayListOf<String>()
     private lateinit var adapter: ArrayAdapter<String>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.e("check data1", this.toString())
         super.onCreate(savedInstanceState)
@@ -39,12 +39,6 @@ class MainActivity : AppCompatActivity() {
         addButton.setOnClickListener {
             val intent = Intent(this@MainActivity, AddTaskActivity::class.java)
             startActivityForResult(intent, 1)
-
-//            itemlist.add(editText.text.toString())
-//            listView.adapter =  adapter
-//            adapter.notifyDataSetChanged()
-            // This is because every time when you add the item the input      space or the eidt text space will be cleared
-//            editText.text.clear()
         }
 
 
@@ -72,29 +66,7 @@ class MainActivity : AppCompatActivity() {
             position.clear()
             adapter.notifyDataSetChanged()
         }
-
-        /*// Setting On Click Listener
-        button.setOnClickListener {
-
-            // Getting the user input
-            val text = editText.text
-
-            // Showing the user input
-            Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
-        }*/
     }
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        outState.putStringArrayList("itemList", itemList)
-//
-//        super.onSaveInstanceState(outState)
-//    }
-//    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-//        itemList = savedInstanceState.getStringArrayList("itemList")!!
-//        intent.getStringExtra("title1")?.let { itemList.add(it) }
-//        Log.e("check data", itemList.toString())
-//
-//        super.onRestoreInstanceState(savedInstanceState)
-//    }
     override fun onActivityResult(
         requestCode: Int, resultCode: Int,
         data: Intent?
@@ -105,6 +77,8 @@ class MainActivity : AppCompatActivity() {
                 data!!.getStringExtra("title1")?.let { itemList.add(it) }
                 adapter.notifyDataSetChanged()
                 Log.e("check data", itemList.toString())
+            } else if (resultCode == RESULT_CANCELED) {
+                adapter.notifyDataSetChanged()
             }
     }
 }
