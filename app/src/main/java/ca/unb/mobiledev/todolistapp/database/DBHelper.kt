@@ -1,6 +1,7 @@
 package ca.unb.mobiledev.todolistapp.database
 
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
@@ -31,12 +32,11 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "Data.db" , null ,1
 
         db?.execSQL(createQuery1)
         val createQuery2 = ("CREATE TABLE " + table2Name + " ("
-
-                + idReminder + "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-                iDPrimaryKey + "INT"+
+                + idReminder + "int NOT NULL, " +
                 reminderTime + " DATE," +
                 endReminder + " DATE," +
                 interval + " TIME,"+
+                " PRIMARY KEY ("+idReminder+"),"+
                 "FOREIGN KEY ("+iDPrimaryKey+") REFERENCES "+table1Name+"("+iDPrimaryKey+")"+");")
 
         db?.execSQL(createQuery2)

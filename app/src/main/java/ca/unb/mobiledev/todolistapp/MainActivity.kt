@@ -11,29 +11,29 @@ import android.widget.Button
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import ca.unb.mobiledev.todolistapp.database.DBHelper
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import ca.unb.mobiledev.todolistapp.databinding.ActivityMainBinding
-import ca.unb.mobiledev.todolistapp.database.DBHelper
-
 
 class MainActivity : AppCompatActivity() {
 
     private var itemList = arrayListOf<String>()
     private lateinit var adapter: ArrayAdapter<String>
+    private lateinit var dbHelper: DBHelper
     private lateinit var binding: ActivityMainBinding
     private lateinit var settings: SettingsFragment
     private lateinit var summary: SummaryFragment
 
-
-    private lateinit var dbHelper: DBHelper
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.e("check data1", this.toString())
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         dbHelper = DBHelper(this@MainActivity)
+        dbHelper = DBHelper(this@MainActivity)
+        // Buttons
         val addButton = findViewById<Button>(R.id.addButton)
         val clear = findViewById<Button>(R.id.clearButton)
         val delete = findViewById<Button>(R.id.delete)
