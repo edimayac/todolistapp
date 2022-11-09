@@ -24,16 +24,15 @@ class MainActivity : AppCompatActivity() {
 
         dbHelper = DBHelper(this@MainActivity)
         val addButton = findViewById<Button>(R.id.addButton)
-        // finding the edit text
-
         val clear = findViewById<Button>(R.id.clearButton)
+        val delete = findViewById<Button>(R.id.delete)
+        val edit = findViewById<Button>(R.id.editTask)
 
         // Initializing the array lists and the adapter
         adapter = ArrayAdapter<String>(this@MainActivity, android.R.layout.simple_list_item_multiple_choice, itemList)
+
+
         var listView = findViewById<ListView>(R.id.listView)
-        var delete = findViewById<Button>(R.id.delete)
-
-
         listView.adapter = adapter
         itemList.add("Test1")
         itemList.add("Test2")
@@ -68,6 +67,21 @@ class MainActivity : AppCompatActivity() {
             }
             position.clear()
             adapter.notifyDataSetChanged()
+        }
+
+
+        // Editing the task selected when the button is pressed
+        edit.setOnClickListener{
+            val position: SparseBooleanArray = listView.checkedItemPositions
+            val count = listView.count
+            var item = count - 1
+            while (item >= 0) {
+                if (position.get(item))
+                {
+                   // Show the details on this task
+                }
+                item--
+            }
         }
     }
     override fun onActivityResult(
