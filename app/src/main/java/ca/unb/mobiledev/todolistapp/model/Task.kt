@@ -22,7 +22,7 @@ class Task private constructor(
         /*
         How to create object for reference:
         1. Create a variable tasks
-        private lateinit var tasks: ArrayList<Tasks>
+        private lateinit var tasks: ArrayList<Task>
 
         2. Use Task.Builder() to add values to it. For Example:
         val task = Task.Builder().name(taskName)
