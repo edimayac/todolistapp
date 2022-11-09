@@ -1,10 +1,13 @@
 package ca.unb.mobiledev.todolistapp
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import ca.unb.mobiledev.todolistapp.model.Task
 
 class AddTaskActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,9 +17,16 @@ class AddTaskActivity : AppCompatActivity() {
         val cancelButton = findViewById<Button>(R.id.cancelButton)
         val saveButton = findViewById<Button>(R.id.saveButton)
         val editText = findViewById<EditText>(R.id.taskEditText)
+        val notesText = findViewById<EditText>(R.id.notesEditText)
+        val dueDate = findViewById<EditText>(R.id.dueDateEditText)
+
 
         // Initializing the array lists and the adapter
+        lateinit var tasks: ArrayList<Task>
         val title = editText.text
+//        val taskName = Task.Builder("one",title.toString(),"hi","hello",10)
+//        tasks.add(taskName.build())
+
 
 
         cancelButton.setOnClickListener() {
@@ -30,6 +40,8 @@ class AddTaskActivity : AppCompatActivity() {
             setResult(RESULT_OK, intent)
             finish()
         }
+
+
 
     }
 }
