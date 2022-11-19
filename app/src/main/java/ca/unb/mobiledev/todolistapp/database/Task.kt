@@ -1,4 +1,4 @@
-package ca.unb.mobiledev.todolistapp.model
+package ca.unb.mobiledev.todolistapp.database
 
 class Task private constructor(
     private val id: String?,
@@ -47,3 +47,4 @@ class Task private constructor(
         fun build() = Task(id, name, notes, dueDate, elapsedTime)
 
     }
+}

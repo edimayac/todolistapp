@@ -13,6 +13,7 @@ import ca.unb.mobiledev.todolistapp.database.DBHelper
 
 
 class MainActivity : AppCompatActivity() {
+
     private var itemList = arrayListOf<String>()
     private lateinit var adapter: ArrayAdapter<String>
     private lateinit var dbHelper: DBHelper
@@ -83,7 +84,7 @@ class MainActivity : AppCompatActivity() {
                     dbHelper.addToTable1(taskName.toString(), "#Test", "1000", "031600")
                 }
                 adapter.notifyDataSetChanged()
-                Log.e("check database", dbHelper.selectFromTable1(taskName.toString())!!.getString(1))
+                //Log.e("check database", dbHelper.selectFromTable1(taskName.toString().get(1))
             } else if (resultCode == RESULT_CANCELED) {
                 adapter.notifyDataSetChanged()
             }

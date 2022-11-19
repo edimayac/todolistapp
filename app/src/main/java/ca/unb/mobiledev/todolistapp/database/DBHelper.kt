@@ -3,7 +3,6 @@ package ca.unb.mobiledev.todolistapp.database
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import ca.unb.mobiledev.todolistapp.model.Task
 
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, "Data.db" , null ,1) {
@@ -32,16 +31,15 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "Data.db" , null ,1
 
         db?.execSQL(createQuery1)
         val createQuery2 = ("CREATE TABLE " + table2Name + " ("
-                + idReminder + "int NOT NULL, " +
+
+                + idReminder + "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                iDPrimaryKey + "INT"+
                 reminderTime + " DATE," +
                 endReminder + " DATE," +
                 interval + " TIME,"+
-                " PRIMARY KEY ("+idReminder+"),"+
                 "FOREIGN KEY ("+iDPrimaryKey+") REFERENCES "+table1Name+"("+iDPrimaryKey+")"+");")
 
-
-
-        //db?.execSQL(createQuery2)
+        db?.execSQL(createQuery2)
     }
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
@@ -123,7 +121,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "Data.db" , null ,1
         db.execSQL(query)
 
     }
-        fun changeWorkTimeTable1(replaceWith: Int, locatingVal: String){
+    fun changeWorkTimeTable1(replaceWith: Int, locatingVal: String){
         val db= this.writableDatabase
 
         val query= "UPDATE $table1Name SET $workTime = $replaceWith WHERE $taskName = '$locatingVal';"
@@ -131,5 +129,10 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "Data.db" , null ,1
         db.execSQL(query)
 
     }
+    fun renewDatabase(context: Context){
+        context.deleteDatabase("Data.db")
+    }
+
+
 
 }
