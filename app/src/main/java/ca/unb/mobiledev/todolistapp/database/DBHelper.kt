@@ -71,7 +71,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "Data.db" , null ,1
 
             }while (cursor.moveToNext())
         }
-
+        cursor.close()
         return arraylist
     }
     fun listTags() : ArrayList<String>{
@@ -88,7 +88,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "Data.db" , null ,1
 
             }while (cursor.moveToNext())
         }
-
+        cursor.close()
         return arraylist
     }
 
@@ -129,6 +129,37 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "Data.db" , null ,1
         db.execSQL(query)
 
     }
+
+    fun addToTable2( assinmetId:Int, time:String , endTime:String , intervall:String){
+        val db= this.writableDatabase
+        val addQuery =
+            "INSERT INTO$table2Name($iDPrimaryKey,$reminderTime,$endReminder,$interval)VALUES('$assinmetId','$time','$endTime','$intervall');"
+        db?.execSQL(addQuery)
+
+    }
+
+    fun selectFromTable2(taskNamel: String): ArrayList<Reminder> {
+        val arraylist = ArrayList<Reminder>()
+        val db = this.readableDatabase
+        val selectQuery = "SELECT * FROM $table2Name WHERE $iDPrimaryKey = (SELECT $iDPrimaryKey FROM $table1Name WHERE $taskName = $taskNamel) ;"
+        val cursor = db.rawQuery(selectQuery, null)
+
+
+        if (cursor.moveToFirst()){
+            do {
+                val reminder = Reminder.Builder().id(cursor.getString(0))
+                    .forgerKey(cursor.getString(1))
+                    .reminderTime(cursor.getString(2))
+                    .endDate(cursor.getString(3))
+                    .Interval(cursor.getInt(4)).build()
+                arraylist.add(reminder)
+
+            }while (cursor.moveToNext())
+        }
+        cursor.close()
+        return arraylist
+    }
+
     fun renewDatabase(context: Context){
         context.deleteDatabase("Data.db")
     }
