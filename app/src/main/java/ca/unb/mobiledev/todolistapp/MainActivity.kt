@@ -1,5 +1,6 @@
 package ca.unb.mobiledev.todolistapp
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,9 @@ import android.widget.Button
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import ca.unb.mobiledev.todolistapp.databinding.ActivityMainBinding
 import ca.unb.mobiledev.todolistapp.database.DBHelper
 
@@ -19,7 +23,8 @@ class MainActivity : AppCompatActivity() {
     private var itemList = arrayListOf<String>()
     private lateinit var adapter: ArrayAdapter<String>
     private lateinit var binding: ActivityMainBinding
-    private lateinit var item: MenuItem
+    private lateinit var settings: SettingsFragment
+    private lateinit var summary: SummaryFragment
 
 
     private lateinit var dbHelper: DBHelper
@@ -39,17 +44,24 @@ class MainActivity : AppCompatActivity() {
 
         // Bottom Navigation Bar
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        binding.bottomNavigationView.setOnClickListener { item ->
+        binding.bottomNavigationView.setOnClickListener{item ->
+            when(item.id){
 
-            when (item.id){
+                R.id.settings -> replaceFragment(settings)
+//                {
+//                    val intent = Intent(this@MainActivity,SettingsActivity::class.java)
+//                    startActivity(intent)
+//                }
 
-                //go to list/summary/settings activity
-
+                R.id.summary -> replaceFragment(summary)
+//                {
+//                    val intent = Intent(this@MainActivity,SummaryActivity::class.java)
+//                    startActivity(intent)
+//                }
             }
-
         }
+
 
 
 
@@ -123,5 +135,14 @@ class MainActivity : AppCompatActivity() {
             } else if (resultCode == RESULT_CANCELED) {
                 adapter.notifyDataSetChanged()
             }
+    }
+
+    private fun replaceFragment(fragment: Fragment){
+        val fragmentManager: FragmentManager = supportFragmentManager
+        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.relative_layout,fragment)
+        fragmentTransaction.commit()
+
+
     }
 }
