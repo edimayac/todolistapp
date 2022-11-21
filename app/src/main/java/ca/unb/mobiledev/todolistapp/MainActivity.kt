@@ -4,11 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.SparseBooleanArray
+import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import ca.unb.mobiledev.todolistapp.databinding.ActivityMainBinding
 import ca.unb.mobiledev.todolistapp.database.DBHelper
 
 
@@ -16,6 +18,10 @@ class MainActivity : AppCompatActivity() {
 
     private var itemList = arrayListOf<String>()
     private lateinit var adapter: ArrayAdapter<String>
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var item: MenuItem
+
+
     private lateinit var dbHelper: DBHelper
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.e("check data1", this.toString())
@@ -30,6 +36,21 @@ class MainActivity : AppCompatActivity() {
 
         // Initializing the array lists and the adapter
         adapter = ArrayAdapter<String>(this@MainActivity, android.R.layout.simple_list_item_multiple_choice, itemList)
+
+        // Bottom Navigation Bar
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.bottomNavigationView.setOnClickListener { item ->
+
+            when (item.id){
+
+                //go to list/summary/settings activity
+
+            }
+
+        }
+
 
 
         var listView = findViewById<ListView>(R.id.listView)
