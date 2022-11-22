@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         dbHelper = DBHelper(this@MainActivity)
-        dbHelper = DBHelper(this@MainActivity)
+        
         // Buttons
         val addButton = findViewById<Button>(R.id.addButton)
         val clear = findViewById<Button>(R.id.clearButton)
