@@ -37,6 +37,9 @@
         <activity android:name=".SummaryActivity"
             android:parentActivityName=".MainActivity">
         </activity>
+        <activity android:name=".EditTaskActivity"
+            android:parentActivityName=".MainActivity">
+        </activity>
     </application>
 
 </manifest>

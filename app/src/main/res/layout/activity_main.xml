@@ -32,7 +32,7 @@
             android:text="Clear" />
 
         <Button
-            android:id="@+id/editTask"
+            android:id="@+id/editTaskBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Edit" />
