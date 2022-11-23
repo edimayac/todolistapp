@@ -13,17 +13,18 @@ import android.widget.Button
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import ca.unb.mobiledev.todolistapp.database.DBHelper
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import ca.unb.mobiledev.todolistapp.databinding.ActivityMainBinding
 
-
 class MainActivity : AppCompatActivity() {
+
     private var itemList = arrayListOf<String>()
     private lateinit var adapter: ArrayAdapter<String>
+    private lateinit var dbHelper: DBHelper
     private lateinit var binding: ActivityMainBinding
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.e("check data1", this.toString())
@@ -34,6 +35,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         bottomNavigationBar()
 
+        dbHelper = DBHelper(this@MainActivity)
+        
         // Buttons
         val addButton = findViewById<Button>(R.id.addButton)
         val clear = findViewById<Button>(R.id.clearButton)
@@ -106,9 +109,14 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         Log.e("check rc", resultCode.toString())
             if (resultCode == RESULT_OK) {
+
+                val taskName = data!!.getStringExtra("title1")
                 data!!.getStringExtra("title1")?.let { itemList.add(it) }
+                if (taskName != null) {
+                    dbHelper.addToTable1(taskName.toString(), "#Test", "1000", "031600")
+                }
                 adapter.notifyDataSetChanged()
-                Log.e("check data", itemList.toString())
+                //Log.e("check database", dbHelper.selectFromTable1(taskName.toString().get(1))
             } else if (resultCode == RESULT_CANCELED) {
                 adapter.notifyDataSetChanged()
             }
