@@ -1,6 +1,8 @@
 package ca.unb.mobiledev.todolistapp
 
+import android.app.Activity
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -21,14 +23,16 @@ class MainActivity : AppCompatActivity() {
     private var itemList = arrayListOf<String>()
     private lateinit var adapter: ArrayAdapter<String>
     private lateinit var binding: ActivityMainBinding
-    private lateinit var settings: SettingsFragment
-    private lateinit var summary: SummaryFragment
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.e("check data1", this.toString())
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        // Bottom Navigation Bar
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        bottomNavigationBar()
 
         // Buttons
         val addButton = findViewById<Button>(R.id.addButton)
@@ -39,25 +43,6 @@ class MainActivity : AppCompatActivity() {
         // Initializing the array lists and the adapter
         adapter = ArrayAdapter<String>(this@MainActivity, android.R.layout.simple_list_item_multiple_choice, itemList)
 
-        // Bottom Navigation Bar
-        binding = ActivityMainBinding.inflate(layoutInflater)
-
-        binding.bottomNavigationView.setOnClickListener{item ->
-            when(item.id){
-
-                R.id.settings -> replaceFragment(settings)
-//                {
-//                    val intent = Intent(this@MainActivity,SettingsActivity::class.java)
-//                    startActivity(intent)
-//                }
-
-                R.id.summary -> replaceFragment(summary)
-//                {
-//                    val intent = Intent(this@MainActivity,SummaryActivity::class.java)
-//                    startActivity(intent)
-//                }
-            }
-        }
 
 
 
@@ -129,12 +114,38 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
-    private fun replaceFragment(fragment: Fragment){
-        val fragmentManager: FragmentManager = supportFragmentManager
-        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.relative_layout,fragment)
-        fragmentTransaction.commit()
+    private fun bottomNavigationBar(){
+
+        binding.bottomNavigationView.setOnItemSelectedListener{item ->(
+
+                when (item.itemId){
+
+                    R.id.summary -> {
+                        val intent = Intent(this,SummaryActivity::class.java)
+                        intent.putExtra("item",item.itemId)
+
+                        startActivity(intent)
+                    }
+
+                    R.id.settings -> {
+                        val intent = Intent(this,SettingsActivity::class.java)
+                        intent.putExtra("item",item.itemId)
+                        startActivity(intent)
+                    }
+
+                    R.id.list -> {
+                        val intent = Intent(this,MainActivity::class.java)
+                        intent.putExtra("item",item.itemId)
+                        startActivity(intent)
+                    }
+
+                }
+                )
+            true
+        }
 
 
     }
+
+
 }
