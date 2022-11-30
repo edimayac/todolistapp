@@ -8,13 +8,20 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.TextView
+import android.widget.Toast
 import ca.unb.mobiledev.todolistapp.R
 
 class TaskDatabaseAdapter(context: Context, items: List<Task>) : ArrayAdapter<Task>(
     context, 0, items) {
+    private class ViewHolder {
+        lateinit var tvName: TextView
+        lateinit var tvNotes: TextView
+        lateinit var tvDueDate: TextView
+        lateinit var cbCheckBox: CheckBox
+    }
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         // Get the data item for this position
-        val task = getItem(position)
+        val task = getItem(position) as Task
 
         // Check if an existing view is being reused, otherwise inflate the view\
         var currView = convertView
@@ -23,22 +30,20 @@ class TaskDatabaseAdapter(context: Context, items: List<Task>) : ArrayAdapter<Ta
         }
 
         // Lookup view for data population
-        val tvName = currView!!.findViewById<TextView>(R.id.taskName_textview)
-        val tvNotes = currView!!.findViewById<TextView>(R.id.notes_textview)
-        val tvDueDate = currView!!.findViewById<TextView>(R.id.dueDate_textview)
-        val checkBox = currView!!.findViewById<CheckBox>(R.id.checkbox)
+        val viewHolder = ViewHolder()
+        viewHolder.tvName = currView!!.findViewById<TextView>(R.id.taskName_textview)
+        viewHolder.tvNotes = currView!!.findViewById<TextView>(R.id.notes_textview)
+        viewHolder.tvDueDate = currView!!.findViewById<TextView>(R.id.dueDate_textview)
+        viewHolder.cbCheckBox = currView!!.findViewById<CheckBox>(R.id.checkbox)
 
-        checkBox.setOnClickListener { v ->
-            val cb = v as CheckBox
-            val task: Task = cb.tag as Task
-            task.isChecked = cb.isChecked
+        viewHolder.tvName.text = task?.name
+        viewHolder.tvNotes.text = task?.notes
+        viewHolder.tvDueDate.text = task?.dueDate
+        currView.tag = viewHolder
+        viewHolder.cbCheckBox.setOnCheckedChangeListener { button, b ->
+            button.isChecked = b
+            task.isChecked = b
         }
-
-        tvName.text = task?.name
-        tvNotes.text = task?.notes
-        tvDueDate.text = task?.dueDate
-        checkBox.isChecked = task?.isChecked!!
-        checkBox.tag = task;
 
         // Return the completed view to render on screen
         return currView

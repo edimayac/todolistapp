@@ -9,6 +9,7 @@ class Task private constructor(
     private var taskElapsedTime: Int?,
     private var taskIsChecked: Boolean?
 ) {
+
     // Only need to include getters
     var id: Int?
         get() = taskId

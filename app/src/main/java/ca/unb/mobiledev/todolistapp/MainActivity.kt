@@ -4,18 +4,26 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.SparseBooleanArray
-import android.widget.*
+import android.widget.AdapterView.OnItemLongClickListener
+import android.widget.Button
+import android.widget.ListView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
-import ca.unb.mobiledev.todolistapp.database.*
+import ca.unb.mobiledev.todolistapp.database.Task
+import ca.unb.mobiledev.todolistapp.database.TaskDatabaseAdapter
+import ca.unb.mobiledev.todolistapp.database.TaskViewModel
 import ca.unb.mobiledev.todolistapp.databinding.ActivityMainBinding
+
 
 class MainActivity : AppCompatActivity() {
 
     private var taskList = arrayListOf<Task>()
+    private var checkedTaskPositions: SparseBooleanArray = SparseBooleanArray()
+    private lateinit var listView: ListView
     private lateinit var taskAdapter: TaskDatabaseAdapter
     private lateinit var taskViewModel: TaskViewModel
     private lateinit var binding: ActivityMainBinding
@@ -25,56 +33,35 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         /*
             Set and Initialize Database Adapter
          */
         taskAdapter = TaskDatabaseAdapter(this@MainActivity, taskList)
-
-        var listView = findViewById<ListView>(R.id.listView)
-        listView.adapter = taskAdapter
-
-
         taskViewModel = ViewModelProvider(this)[TaskViewModel::class.java]
+
+        listView = findViewById<ListView>(R.id.listView)
+        listView.adapter = taskAdapter
         taskList.addAll(taskViewModel.getAllTasks()!!)
         taskAdapter.notifyDataSetChanged()
 
         // Adding the toast message to the list when an item on the list is pressed
-
         listView.setOnItemClickListener { _, _, i, _ ->
-            Toast.makeText(this, "You Selected the item --> "+ taskList[i], Toast.LENGTH_SHORT).show()
+            Log.e("Task.isChecked", "You Selected the item --> " + taskList[i].isChecked)
         }
 
-
-
-        // Bottom Navigation Bar
-        binding = ActivityMainBinding.inflate(layoutInflater)
-
-        binding.bottomNavigationView.setOnClickListener{item ->
-            when(item.id){
-
-                R.id.settings -> replaceFragment(settings)
-//                {
-//                    val intent = Intent(this@MainActivity,SettingsActivity::class.java)
-//                    startActivity(intent)
-//                }
-
-                R.id.summary -> replaceFragment(summary)
-//                {
-//                    val intent = Intent(this@MainActivity,SummaryActivity::class.java)
-//                    startActivity(intent)
-//                }
+        listView.onItemLongClickListener =
+            OnItemLongClickListener { _, _, pos, _ ->
+                Log.e("long clicked", "pos: $pos")
+                true
             }
-        }
-
 
         /*
-            Initialize and Set Button Click Listeners
-            1. Add
-            2. Clear
-            3. Delete
-            4. Edit
-         */
+           Initialize and Set Button Click Listeners
+           1. Add
+           2. Clear
+           3. Delete
+           4. Edit
+        */
         // Adding the items to the list when the add button is pressed
 
         // Buttons
@@ -97,20 +84,23 @@ class MainActivity : AppCompatActivity() {
 
         // Selecting and Deleting the items from the list when the delete button is pressed
         delete.setOnClickListener {
-            val position: SparseBooleanArray = listView.checkedItemPositions
-            val count = listView.count
+            taskList.forEachIndexed { index, task ->
+                checkedTaskPositions.put(index, task.isChecked!!)
+            }
+            Log.e("check", listView.checkedItemPositions.toString())
+            val count = taskList.count()
             var id = 0
             var item = count - 1
             while (item >= 0) {
-                if (position.get(item))
+                if (checkedTaskPositions.get(item))
                 {
                     id = taskList[item].id!!
                     taskAdapter.remove(taskList[item])
+                    taskViewModel.deleteTask(id)
                 }
                 item--
             }
-            position.clear()
-            taskViewModel.deleteTask(id)
+            checkedTaskPositions.clear()
             taskAdapter.notifyDataSetChanged()
         }
 
@@ -122,9 +112,29 @@ class MainActivity : AppCompatActivity() {
             while (item >= 0) {
                 if (position.get(item))
                 {
-                   // Show the details on this task
+                    // Show the details on this task
                 }
                 item--
+            }
+        }
+
+        // Bottom Navigation Bar
+        binding = ActivityMainBinding.inflate(layoutInflater)
+
+        binding.bottomNavigationView.setOnClickListener{item ->
+            when(item.id){
+
+                R.id.settings -> replaceFragment(settings)
+//                {
+//                    val intent = Intent(this@MainActivity,SettingsActivity::class.java)
+//                    startActivity(intent)
+//                }
+
+                R.id.summary -> replaceFragment(summary)
+//                {
+//                    val intent = Intent(this@MainActivity,SummaryActivity::class.java)
+//                    startActivity(intent)
+//                }
             }
         }
     }
@@ -153,7 +163,5 @@ class MainActivity : AppCompatActivity() {
         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.relative_layout,fragment)
         fragmentTransaction.commit()
-
-
     }
 }
