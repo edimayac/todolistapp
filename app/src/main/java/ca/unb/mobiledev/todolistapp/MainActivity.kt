@@ -1,5 +1,6 @@
 package ca.unb.mobiledev.todolistapp
 
+
 import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -7,86 +8,109 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.SparseBooleanArray
-import android.view.MenuItem
-import android.widget.ArrayAdapter
+import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.Button
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import ca.unb.mobiledev.todolistapp.database.DBHelper
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.ViewModelProvider
+import ca.unb.mobiledev.todolistapp.database.Task
+import ca.unb.mobiledev.todolistapp.database.TaskDatabaseAdapter
+import ca.unb.mobiledev.todolistapp.database.TaskViewModel
 import ca.unb.mobiledev.todolistapp.databinding.ActivityMainBinding
+
 
 class MainActivity : AppCompatActivity() {
 
-    private var itemList = arrayListOf<String>()
-    private lateinit var adapter: ArrayAdapter<String>
-    private lateinit var dbHelper: DBHelper
+    private var taskList = arrayListOf<Task>()
+    private var checkedTaskPositions: SparseBooleanArray = SparseBooleanArray()
+    private lateinit var listView: ListView
+    private lateinit var taskAdapter: TaskDatabaseAdapter
+    private lateinit var taskViewModel: TaskViewModel
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.e("check data1", this.toString())
         super.onCreate(savedInstanceState)
-
+        
         // Bottom Navigation Bar
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         bottomNavigationBar()
-
-        dbHelper = DBHelper(this@MainActivity)
         
+
+        /*
+            Set and Initialize Database Adapter
+        */
+        taskAdapter = TaskDatabaseAdapter(this@MainActivity, taskList)
+        taskViewModel = ViewModelProvider(this)[TaskViewModel::class.java]
+
+        listView = findViewById<ListView>(R.id.listView)
+        listView.adapter = taskAdapter
+        taskList.addAll(taskViewModel.getAllTasks()!!)
+        taskAdapter.notifyDataSetChanged()
+
+        // Adding the toast message to the list when an item on the list is pressed
+        listView.setOnItemClickListener { _, _, i, _ ->
+            Log.e("Task.isChecked", "You Selected the item --> " + taskList[i].isChecked)
+        }
+
+        listView.onItemLongClickListener =
+            OnItemLongClickListener { _, _, pos, _ ->
+                Log.e("long clicked", "pos: $pos")
+                true
+            }
+
+        /*
+           Initialize and Set Button Click Listeners
+           1. Add
+           2. Clear
+           3. Delete
+           4. Edit
+        */
+        // Adding the items to the list when the add button is pressed
+
         // Buttons
         val addButton = findViewById<Button>(R.id.addButton)
         val clear = findViewById<Button>(R.id.clearButton)
         val delete = findViewById<Button>(R.id.delete)
         val edit = findViewById<Button>(R.id.editTask)
 
-        // Initializing the array lists and the adapter
-        adapter = ArrayAdapter<String>(this@MainActivity, android.R.layout.simple_list_item_multiple_choice, itemList)
-
-
-
-
-
-        var listView = findViewById<ListView>(R.id.listView)
-        listView.adapter = adapter
-        itemList.add("Test1")
-        itemList.add("Test2")
-
-        // Adding the items to the list when the add button is pressed
         addButton.setOnClickListener {
             val intent = Intent(this@MainActivity, AddTaskActivity::class.java)
             startActivityForResult(intent, 1)
         }
 
-
         // Clearing all the items in the list when the clear button is pressed
         clear.setOnClickListener {
-            itemList.clear()
-            adapter.notifyDataSetChanged()
+            taskList.clear()
+            taskViewModel.deleteAllTasks()
+            taskAdapter.notifyDataSetChanged()
         }
-        // Adding the toast message to the list when an item on the list is pressed
-        listView.setOnItemClickListener { _, _, i, _ ->
-            Toast.makeText(this, "You Selected the item --> "+ itemList[i], Toast.LENGTH_SHORT).show()
-        }
+
         // Selecting and Deleting the items from the list when the delete button is pressed
         delete.setOnClickListener {
-            val position: SparseBooleanArray = listView.checkedItemPositions
-            val count = listView.count
+            taskList.forEachIndexed { index, task ->
+                checkedTaskPositions.put(index, task.isChecked!!)
+            }
+            Log.e("check", listView.checkedItemPositions.toString())
+            val count = taskList.count()
+            var id = 0
             var item = count - 1
             while (item >= 0) {
-                if (position.get(item))
+                if (checkedTaskPositions.get(item))
                 {
-                    adapter.remove(itemList[item])
+                    id = taskList[item].id!!
+                    taskAdapter.remove(taskList[item])
+                    taskViewModel.deleteTask(id)
                 }
                 item--
             }
-            position.clear()
-            adapter.notifyDataSetChanged()
+            checkedTaskPositions.clear()
+            taskAdapter.notifyDataSetChanged()
         }
-
 
         // Editing the task selected when the button is pressed
         edit.setOnClickListener{
@@ -96,7 +120,7 @@ class MainActivity : AppCompatActivity() {
             while (item >= 0) {
                 if (position.get(item))
                 {
-                   // Show the details on this task
+                    // Show the details on this task
                 }
                 item--
             }
@@ -107,18 +131,18 @@ class MainActivity : AppCompatActivity() {
         data: Intent?
     ) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.e("check rc", resultCode.toString())
             if (resultCode == RESULT_OK) {
+                val task = Task.Builder()
+                    .name(data?.getStringExtra("title")!!)
+                    .notes(data?.getStringExtra("notes")!!)
+                    .dueDate(data?.getStringExtra("dueDate")!!)
+                    .build()
 
-                val taskName = data!!.getStringExtra("title1")
-                data!!.getStringExtra("title1")?.let { itemList.add(it) }
-                if (taskName != null) {
-                    dbHelper.addToTable1(taskName.toString(), "#Test", "1000", "031600")
-                }
-                adapter.notifyDataSetChanged()
-                //Log.e("check database", dbHelper.selectFromTable1(taskName.toString().get(1))
+                task.id = taskViewModel.addTask(task)
+                taskList.add(task)
+                taskAdapter.notifyDataSetChanged()
             } else if (resultCode == RESULT_CANCELED) {
-                adapter.notifyDataSetChanged()
+                taskAdapter.notifyDataSetChanged()
             }
     }
 

@@ -3,7 +3,7 @@ package ca.unb.mobiledev.todolistapp.dao
 /**
  * This DAO object validates the SQL at compile-time and associates it with a method
  */
-interface ItemDao {
+interface TaskDao {
 
 
 
