@@ -1,13 +1,10 @@
 package ca.unb.mobiledev.todolistapp
 
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import ca.unb.mobiledev.todolistapp.model.Task
 
 class AddTaskActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,12 +15,13 @@ class AddTaskActivity : AppCompatActivity() {
         val saveButton = findViewById<Button>(R.id.saveButton)
         val editText = findViewById<EditText>(R.id.taskEditText)
         val notesText = findViewById<EditText>(R.id.notesEditText)
-        val dueDate = findViewById<EditText>(R.id.dueDateEditText)
+        val dueDateText = findViewById<EditText>(R.id.dueDateEditText)
 
 
         // Initializing the array lists and the adapter
-        lateinit var tasks: ArrayList<Task>
-        val title = editText.text
+        val name = editText.text
+        val notes = notesText.text
+        val dueDate = dueDateText.text
 //        val taskName = Task.Builder("one",title.toString(),"hi","hello",10)
 //        tasks.add(taskName.build())
 
@@ -36,7 +34,9 @@ class AddTaskActivity : AppCompatActivity() {
         }
         saveButton.setOnClickListener() {
             val intent = Intent(this@AddTaskActivity, MainActivity::class.java)
-            intent.putExtra("title1", title.toString())
+            intent.putExtra("title", name.toString())
+            intent.putExtra("notes", notes.toString())
+            intent.putExtra("dueDate", dueDate.toString())
             setResult(RESULT_OK, intent)
             finish()
         }

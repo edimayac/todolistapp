@@ -1,22 +1,52 @@
 package ca.unb.mobiledev.todolistapp.database
 
 class Task private constructor(
-    private val id: String?,
-    private val name: String?,
-    private val notes: String?,
-    private val dueDate: String?,
-    private val elapsedTime: Int?
+    private var taskId: Int?,
+    private var taskName: String?,
+    private var taskNotes: String?,
+    private var taskHashTag: String?,
+    private var taskDueDate: String?,
+    private var taskElapsedTime: Int?,
+    private var taskIsChecked: Boolean?
 ) {
     // Only need to include getters
-    val title: String
-        get() = "$id: $name"
+    var id: Int?
+        get() = taskId
+        set(value) { taskId = value}
+
+    var name: String?
+        get() = taskName
+        set(value) { taskName = value }
+
+    var notes: String?
+        get() = taskNotes
+        set(value) { taskNotes = value }
+
+    var hashTag: String?
+        get() = taskHashTag
+        set(value) { taskHashTag = value }
+
+    var dueDate: String?
+        get() = taskDueDate
+        set(value) { taskDueDate = value }
+
+    var elapsedTime: String
+        get() = "$taskElapsedTime"
+        set(value) { taskElapsedTime = value.toInt() }
+
+    var isChecked: Boolean?
+        get() = taskIsChecked
+        set(value) { taskIsChecked = value }
+
 
     data class Builder(
-        var id: String? = null,
+        var id: Int? = null,
         var name: String? = null,
         var notes: String? = null,
+        var hashTag: String? = null,
         var dueDate: String? = null,
         var elapsedTime: Int? = 0,
+        var isChecked: Boolean? = false
     ) {
 
         /*
@@ -39,12 +69,14 @@ class Task private constructor(
         Ref: Lab 5
          */
 
-        fun id(id: String) = apply { this.id = id }
+        fun id(id: Int) = apply { this.id = id }
         fun name(name: String) = apply { this.name = name }
-        fun notes(notes: String?) = apply { this.notes = name }
+        fun notes(notes: String?) = apply { this.notes = notes }
+        fun hashTag(hashTag: String?) = apply { this.hashTag = hashTag }
         fun dueDate(dueDate: String?) = apply { this.dueDate = dueDate }
         fun elapsedTime(elapsedTime: Int?) = apply { this.elapsedTime = elapsedTime }
-        fun build() = Task(id, name, notes, dueDate, elapsedTime)
+        fun isChecked(isChecked: Boolean?) = apply { this.isChecked = isChecked }
+        fun build() = Task(id, name, notes, hashTag, dueDate, elapsedTime, isChecked)
 
     }
 }
