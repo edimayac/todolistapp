@@ -3,8 +3,6 @@ package ca.unb.mobiledev.todolistapp.database
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.util.Log
-import android.widget.Toast
 
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, "Data.db" , null ,1) {
@@ -110,6 +108,29 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "Data.db" , null ,1
                 arraylist.add(tag)
 
             }while (cursor.moveToNext())
+        }
+        cursor.close()
+        return arraylist
+    }
+    fun findByTag(str: String) : ArrayList<Task>{
+        val arraylist = ArrayList<Task>()
+        val db = this.readableDatabase
+        val selectQuery = "SELECT * FROM $table1Name WHERE $taskNotes = '$str';"
+        val cursor = db.rawQuery(selectQuery, null)
+
+
+        if (cursor.moveToFirst()){
+            do {
+                val task = Task.Builder()
+                    .id(cursor.getInt(0))
+                    .name(cursor.getString(1))
+                    .notes(cursor.getString(2))
+                    .hashTag(cursor.getString(3))
+                    .dueDate(cursor.getString(4))
+                    .elapsedTime(cursor.getInt(5)).build()
+                arraylist.add(task)
+
+            } while (cursor.moveToNext())
         }
         cursor.close()
         return arraylist
