@@ -74,7 +74,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "Data.db" , null ,1
     fun selectAllFromTable1(): ArrayList<Task> {
         val arraylist = ArrayList<Task>()
         val db = this.readableDatabase
-        val selectQuery = "SELECT * FROM $table1Name;"
+        val selectQuery = "SELECT * FROM $table1Name ORDER BY $taskName;"
         val cursor = db.rawQuery(selectQuery, null)
 
 
@@ -115,7 +115,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "Data.db" , null ,1
     fun findByTag(str: String) : ArrayList<Task>{
         val arraylist = ArrayList<Task>()
         val db = this.readableDatabase
-        val selectQuery = "SELECT * FROM $table1Name WHERE $taskNotes = '$str';"
+        val selectQuery = "SELECT * FROM $table1Name WHERE $taskNotes = '$str' ORDER BY $taskName ;"
         val cursor = db.rawQuery(selectQuery, null)
 
 
