@@ -1,21 +1,18 @@
 package ca.unb.mobiledev.todolistapp
 
 
-import android.app.Activity
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.SparseBooleanArray
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
-import android.widget.Button
-import android.widget.ListView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
+import androidx.core.view.forEach
+import androidx.core.view.get
 import androidx.lifecycle.ViewModelProvider
 import ca.unb.mobiledev.todolistapp.database.Task
 import ca.unb.mobiledev.todolistapp.database.TaskDatabaseAdapter
@@ -47,9 +44,10 @@ class MainActivity : AppCompatActivity() {
         taskAdapter = TaskDatabaseAdapter(this@MainActivity, taskList)
         taskViewModel = ViewModelProvider(this)[TaskViewModel::class.java]
 
-        listView = findViewById<ListView>(R.id.listView)
+        listView = findViewById(R.id.listView)
+        listView.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
         listView.adapter = taskAdapter
-        taskList.addAll(taskViewModel.getAllTasks()!!)
+        taskList.addAll(taskViewModel.getAllTasks())
         taskAdapter.notifyDataSetChanged()
 
         // Adding the toast message to the list when an item on the list is pressed
@@ -58,8 +56,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         listView.onItemLongClickListener =
-            OnItemLongClickListener { _, _, pos, _ ->
+            OnItemLongClickListener { _, view, pos, _ ->
                 Log.e("long clicked", "pos: $pos")
+                optionsMenu(view, pos)
                 true
             }
 
@@ -76,10 +75,27 @@ class MainActivity : AppCompatActivity() {
         val addButton = findViewById<Button>(R.id.addButton)
         val clear = findViewById<Button>(R.id.clearButton)
         val delete = findViewById<Button>(R.id.delete)
-        val edit = findViewById<Button>(R.id.editTask)
+        val add = findViewById<Button>(R.id.addTaskBtn)
+        val addTaskEditText = findViewById<EditText>(R.id.addTaskEditText)
 
         addButton.setOnClickListener {
-            val intent = Intent(this@MainActivity, AddTaskActivity::class.java)
+            //Pull down keyboard
+            val mgr: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            mgr.hideSoftInputFromWindow(addTaskEditText.windowToken, 0)
+
+            if (addTaskEditText.text.isNotEmpty()) {
+                val newTask = Task.Builder().name(addTaskEditText.text.toString()).build()
+                newTask.id = taskViewModel.addTask(newTask)
+                taskList.add(newTask)
+                taskAdapter.notifyDataSetChanged()
+                addTaskEditText.text.clear()
+            } else {
+                Toast.makeText(this@MainActivity, "Please Enter a Task Name!", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        add.setOnClickListener {
+            val intent = Intent(this@MainActivity, EditTaskActivity::class.java)
             startActivityForResult(intent, 1)
         }
 
@@ -95,52 +111,84 @@ class MainActivity : AppCompatActivity() {
             taskList.forEachIndexed { index, task ->
                 checkedTaskPositions.put(index, task.isChecked!!)
             }
-            Log.e("check", listView.checkedItemPositions.toString())
+
             val count = taskList.count()
-            var id = 0
+            var id: Int
             var item = count - 1
             while (item >= 0) {
-                if (checkedTaskPositions.get(item))
+                if (checkedTaskPositions[item])
                 {
                     id = taskList[item].id!!
-                    taskAdapter.remove(taskList[item])
+                    taskList.remove(taskList[item])
+                    taskAdapter.notifyDataSetChanged()
                     taskViewModel.deleteTask(id)
                 }
                 item--
             }
-            checkedTaskPositions.clear()
-            taskAdapter.notifyDataSetChanged()
-        }
 
-        // Editing the task selected when the button is pressed
-        edit.setOnClickListener{
-            val position: SparseBooleanArray = listView.checkedItemPositions
-            val count = listView.count
-            var item = count - 1
-            while (item >= 0) {
-                if (position.get(item))
-                {
-                    // Show the details on this task
-                }
-                item--
-            }
+            //Reset Checkboxes
+            checkedTaskPositions.clear()
         }
     }
+
+    private fun optionsMenu(view: View, pos: Int) {
+        val optionsMenu = PopupMenu(this, view)
+        val menuInflater = optionsMenu.menuInflater
+        menuInflater.inflate(R.menu.options_menu, optionsMenu.menu)
+        optionsMenu.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.deleteItemOption -> {
+                    val id = taskList[pos].id!!
+                    taskAdapter.remove(taskList[pos])
+                    taskViewModel.deleteTask(id)
+                    taskAdapter.notifyDataSetChanged()
+                    true
+                }
+                R.id.editItemOption -> {
+                    val task = taskList[pos]
+                    val intent = Intent(this@MainActivity, EditTaskActivity::class.java)
+                    intent.putExtra("id", task.id)
+                    intent.putExtra("name", task.name)
+                    intent.putExtra("notes", task.notes)
+                    intent.putExtra("dueDate", task.dueDate)
+                    intent.putExtra("elapsedTime", task.elapsedTime)
+                    intent.putExtra("hashTag", task.hashTag)
+                    startActivityForResult(intent, 1)
+                    true
+                }
+                else -> { true }
+            }
+        }
+        optionsMenu.show()
+    }
+
     override fun onActivityResult(
         requestCode: Int, resultCode: Int,
         data: Intent?
     ) {
         super.onActivityResult(requestCode, resultCode, data)
             if (resultCode == RESULT_OK) {
-                val task = Task.Builder()
-                    .name(data?.getStringExtra("title")!!)
-                    .notes(data?.getStringExtra("notes")!!)
-                    .dueDate(data?.getStringExtra("dueDate")!!)
+                val newTask = Task.Builder()
+                    .id(data?.getIntExtra("id", 0)!!)
+                    .name(data.getStringExtra("name")!!)
+                    .notes(data.getStringExtra("notes")!!)
+                    .dueDate(data.getStringExtra("dueDate")!!)
+                    .hashTag(data.getStringExtra("hashTag")!!)
+                    .elapsedTime(data.getIntExtra("elapsedTime", 0))
                     .build()
 
-                task.id = taskViewModel.addTask(task)
-                taskList.add(task)
+                if (taskList.contains(newTask)) {
+                    val index = taskList.indexOf(newTask)
+                    val oldTask = taskList[index]
+                    taskViewModel.editTask(newTask, oldTask)
+                    taskList[index] = newTask
+                } else {
+                    newTask.id = taskViewModel.addTask(newTask)
+                    taskList.add(newTask)
+                }
+
                 taskAdapter.notifyDataSetChanged()
+
             } else if (resultCode == RESULT_CANCELED) {
                 taskAdapter.notifyDataSetChanged()
             }

@@ -64,8 +64,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "Data.db" , null ,1
                 .name(cursor.getString(1))
                 .notes(cursor.getString(2))
                 .hashTag(cursor.getString(3))
-                .dueDate(cursor.getString(4))
-                .elapsedTime(cursor.getInt(5)).build()
+                .elapsedTime(cursor.getInt(4))
+                .dueDate(cursor.getString(5)).build()
         }
         cursor.close()
         return task
@@ -85,8 +85,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "Data.db" , null ,1
                     .name(cursor.getString(1))
                     .notes(cursor.getString(2))
                     .hashTag(cursor.getString(3))
-                    .dueDate(cursor.getString(4))
-                    .elapsedTime(cursor.getInt(5)).build()
+                    .elapsedTime(cursor.getInt(4))
+                    .dueDate(cursor.getString(5)).build()
                 arraylist.add(task)
 
             } while (cursor.moveToNext())
@@ -126,8 +126,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "Data.db" , null ,1
                     .name(cursor.getString(1))
                     .notes(cursor.getString(2))
                     .hashTag(cursor.getString(3))
-                    .dueDate(cursor.getString(4))
-                    .elapsedTime(cursor.getInt(5)).build()
+                    .elapsedTime(cursor.getInt(4))
+                    .dueDate(cursor.getString(5)).build()
                 arraylist.add(task)
 
             } while (cursor.moveToNext())

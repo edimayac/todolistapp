@@ -1,7 +1,7 @@
 package ca.unb.mobiledev.todolistapp.database
 
 class Task private constructor(
-    private var taskId: Int?,
+    private var taskId: Int? = 0,
     private var taskName: String?,
     private var taskNotes: String?,
     private var taskHashTag: String?,
@@ -31,9 +31,9 @@ class Task private constructor(
         get() = taskDueDate
         set(value) { taskDueDate = value }
 
-    var elapsedTime: String
-        get() = "$taskElapsedTime"
-        set(value) { taskElapsedTime = value.toInt() }
+    var elapsedTime: Int?
+        get() = taskElapsedTime
+        set(value) { taskElapsedTime = value }
 
     var isChecked: Boolean?
         get() = taskIsChecked
@@ -41,11 +41,11 @@ class Task private constructor(
 
 
     data class Builder(
-        var id: Int? = null,
-        var name: String? = null,
-        var notes: String? = null,
-        var hashTag: String? = null,
-        var dueDate: String? = null,
+        var id: Int? = 0,
+        var name: String? = "",
+        var notes: String? = "",
+        var hashTag: String? = "",
+        var dueDate: String? = "",
         var elapsedTime: Int? = 0,
         var isChecked: Boolean? = false
     ) {

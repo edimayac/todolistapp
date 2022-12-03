@@ -9,12 +9,12 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
     // TODO
     //  Add mapping calls between the UI and Database
     fun addTask(task: Task): Int{ //insert
-        dbHelper.addToTable1(task.name, task.notes, task.hashTag, task.elapsedTime.toInt(), task.dueDate)
+        dbHelper.addToTable1(task.name, task.notes, task.hashTag, task.elapsedTime!!, task.dueDate)
 
         return dbHelper.selectLastInsertedId()
     }
 
-    fun getAllTasks():ArrayList<Task>?{
+    fun getAllTasks(): ArrayList<Task> {
         return dbHelper.selectAllFromTable1()
     }
 
@@ -34,7 +34,7 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
         dbHelper.changeNameTable1(newTask.name, oldTask.name)
         dbHelper.changeNotesTable1(newTask.notes, oldTask.name)
         dbHelper.changeTagTable1(newTask.hashTag, oldTask.name)
-        dbHelper.changeWorkTimeTable1(newTask.elapsedTime.toInt(), oldTask.name)
+        dbHelper.changeWorkTimeTable1(newTask.elapsedTime!!, oldTask.name)
         dbHelper.changeDueDateTable1(newTask.dueDate, oldTask.name)
     }
 }
