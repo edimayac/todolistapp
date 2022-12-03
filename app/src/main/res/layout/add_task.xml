@@ -8,12 +8,6 @@
         android:id="@+id/taskEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="31dp"
         android:hint="Task"
         android:padding="20dp" />
 
@@ -21,24 +15,25 @@
         android:id="@+id/notesEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="65dp"
+        android:layout_below="@id/taskEditText"
         android:hint="Notes"
         android:padding="20dp" />
 
+    <EditText
+        android:id="@+id/hashTagEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/notesEditText"
+        android:hint="HashTag"
+        android:padding="20dp" />
 
     <EditText
         android:id="@+id/dueDateEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="-1dp"
-        android:layout_marginTop="183dp"
+        android:layout_below="@id/hashTagEditText"
         android:hint="Due Date"
         android:padding="20dp" />
-
 
     <Button
         android:id="@+id/cancelButton"

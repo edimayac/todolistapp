@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import ca.unb.mobiledev.todolistapp.database.Task
 
 class AddTaskActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,33 +16,31 @@ class AddTaskActivity : AppCompatActivity() {
         val saveButton = findViewById<Button>(R.id.saveButton)
         val editText = findViewById<EditText>(R.id.taskEditText)
         val notesText = findViewById<EditText>(R.id.notesEditText)
+        val hashTagText = findViewById<EditText>(R.id.hashTagEditText)
         val dueDateText = findViewById<EditText>(R.id.dueDateEditText)
 
-
-        // Initializing the array lists and the adapter
         val name = editText.text
         val notes = notesText.text
+        val hashTag = hashTagText.text
         val dueDate = dueDateText.text
-//        val taskName = Task.Builder("one",title.toString(),"hi","hello",10)
-//        tasks.add(taskName.build())
 
 
-
-        cancelButton.setOnClickListener() {
+        cancelButton.setOnClickListener {
             val intent = Intent(this@AddTaskActivity, MainActivity::class.java)
             setResult(RESULT_CANCELED, intent)
             finish()
         }
-        saveButton.setOnClickListener() {
+
+        saveButton.setOnClickListener {
             val intent = Intent(this@AddTaskActivity, MainActivity::class.java)
-            intent.putExtra("title", name.toString())
+            intent.putExtra("name", name.toString())
             intent.putExtra("notes", notes.toString())
+            intent.putExtra("hashTag", hashTag.toString())
             intent.putExtra("dueDate", dueDate.toString())
+            intent.putExtra("elapsedTime", 0)
             setResult(RESULT_OK, intent)
             finish()
         }
-
-
 
     }
 }
