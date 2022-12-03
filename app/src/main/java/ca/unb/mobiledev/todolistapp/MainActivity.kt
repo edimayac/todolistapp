@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         // Bottom Navigation Bar
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -201,20 +201,22 @@ class MainActivity : AppCompatActivity() {
                     R.id.summary -> {
                         val intent = Intent(this,SummaryActivity::class.java)
                         intent.putExtra("item",item.itemId)
-
                         startActivity(intent)
+                        finish()
                     }
 
                     R.id.settings -> {
                         val intent = Intent(this,SettingsActivity::class.java)
                         intent.putExtra("item",item.itemId)
                         startActivity(intent)
+                        finish()
                     }
 
                     R.id.list -> {
                         val intent = Intent(this,MainActivity::class.java)
                         intent.putExtra("item",item.itemId)
                         startActivity(intent)
+                        finish()
                     }
 
                 }
