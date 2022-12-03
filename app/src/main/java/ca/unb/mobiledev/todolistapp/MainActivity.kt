@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         taskViewModel = ViewModelProvider(this)[TaskViewModel::class.java]
 
         listView = findViewById(R.id.listView)
-        listView.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
+        listView.choiceMode = ListView.CHOICE_MODE_MULTIPLE
         listView.adapter = taskAdapter
         taskList.addAll(taskViewModel.getAllTasks())
         taskAdapter.notifyDataSetChanged()
