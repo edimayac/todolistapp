@@ -41,28 +41,28 @@ class TaskDatabaseAdapter(context: Context, items: List<Task>) : ArrayAdapter<Ta
             viewHolder.tvName.visibility = View.VISIBLE
             viewHolder.tvName.text = task.name
         } else {
-            viewHolder.tvName.visibility = View.INVISIBLE
+            viewHolder.tvName.visibility = View.GONE
         }
 
         if (!task.notes.isNullOrEmpty() && task.notes != "null") {
             viewHolder.tvNotes.visibility = View.VISIBLE
             viewHolder.tvNotes.text = task.notes
         } else {
-            viewHolder.tvNotes.visibility = View.INVISIBLE
+            viewHolder.tvNotes.visibility = View.GONE
         }
 
         if (!task.hashTag.isNullOrEmpty() && task.hashTag != "null") {
             viewHolder.tvHashTag.visibility = View.VISIBLE
             viewHolder.tvHashTag.text = task.hashTag
         } else {
-            viewHolder.tvHashTag.visibility = View.INVISIBLE
+            viewHolder.tvHashTag.visibility = View.GONE
         }
 
         if (!task.dueDate.isNullOrEmpty() && task.dueDate != "null") {
             viewHolder.tvDueDate.visibility = View.VISIBLE
             viewHolder.tvDueDate.text = task.dueDate
         } else {
-            viewHolder.tvDueDate.visibility = View.INVISIBLE
+            viewHolder.tvDueDate.visibility = View.GONE
         }
 
 

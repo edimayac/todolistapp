@@ -2,10 +2,15 @@ package ca.unb.mobiledev.todolistapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
+import android.widget.CalendarView
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import ca.unb.mobiledev.todolistapp.MainActivity.Companion.EDIT
 import ca.unb.mobiledev.todolistapp.database.Task
+import java.text.SimpleDateFormat
+import java.util.*
 
 class EditTaskActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,7 +24,7 @@ class EditTaskActivity : AppCompatActivity() {
         val editText = findViewById<EditText>(R.id.taskEditText)
         val notesText = findViewById<EditText>(R.id.notesEditText)
         val hashTagText = findViewById<EditText>(R.id.hashTagEditText)
-        val dueDateText = findViewById<EditText>(R.id.dueDateEditText)
+        val calendarView = findViewById<CalendarView>(R.id.calendar)
 
         if (intent != null) {
             task.id = intent.getIntExtra("id", 0)
@@ -30,16 +35,20 @@ class EditTaskActivity : AppCompatActivity() {
             task.elapsedTime = intent.getIntExtra("elapsedTime", 0)
         }
 
+
         editText.setText(task.name)
         notesText.setText(task.notes)
         hashTagText.setText(task.hashTag)
-        dueDateText.setText(task.dueDate)
 
         val name = editText.text
         val notes = notesText.text
         val hashTag = hashTagText.text
-        val dueDate = dueDateText.text
+        var dueDate = SimpleDateFormat("MM/dd/yyyy").format(Date(calendarView.date))
 
+        calendarView.setOnDateChangeListener { view, year, month, day ->
+           dueDate = "$month/$day/$year"
+            Log.v("Calendar", dueDate.toString())
+        }
 
         cancelButton.setOnClickListener {
             val intent = Intent(this@EditTaskActivity, MainActivity::class.java)
@@ -48,6 +57,8 @@ class EditTaskActivity : AppCompatActivity() {
         }
         saveButton.setOnClickListener {
             val intent = Intent(this@EditTaskActivity, MainActivity::class.java)
+            intent.putExtra("activity", EDIT)
+            intent.putExtra("id", task.id)
             intent.putExtra("name", name.toString())
             intent.putExtra("notes", notes.toString())
             intent.putExtra("hashTag", hashTag.toString())

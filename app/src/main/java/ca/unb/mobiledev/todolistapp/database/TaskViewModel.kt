@@ -31,10 +31,18 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun editTask(newTask: Task, oldTask: Task) {
-        dbHelper.changeNameTable1(newTask.name, oldTask.name)
-        dbHelper.changeNotesTable1(newTask.notes, oldTask.name)
-        dbHelper.changeTagTable1(newTask.hashTag, oldTask.name)
-        dbHelper.changeWorkTimeTable1(newTask.elapsedTime!!, oldTask.name)
-        dbHelper.changeDueDateTable1(newTask.dueDate, oldTask.name)
+        dbHelper.changeNameTable1(newTask.name, oldTask.id)
+        dbHelper.changeNotesTable1(newTask.notes, oldTask.id)
+        dbHelper.changeTagTable1(newTask.hashTag, oldTask.id)
+        dbHelper.changeWorkTimeTable1(newTask.elapsedTime!!, oldTask.id)
+        dbHelper.changeDueDateTable1(newTask.dueDate, oldTask.id)
+    }
+
+    fun editTask(newTask: Task, id: Int) {
+        dbHelper.changeNameTable1(newTask.name, id)
+        dbHelper.changeNotesTable1(newTask.notes, id)
+        dbHelper.changeTagTable1(newTask.hashTag, id)
+        dbHelper.changeWorkTimeTable1(newTask.elapsedTime!!, id)
+        dbHelper.changeDueDateTable1(newTask.dueDate, id)
     }
 }

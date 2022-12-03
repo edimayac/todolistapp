@@ -44,7 +44,7 @@
         android:layout_toRightOf="@id/notes_textview"
         android:background="@drawable/round_corner"
         android:paddingHorizontal="5sp"
-        android:visibility="invisible"
+        android:visibility="gone"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textColor="@color/black"
         android:textSize="11sp" />
@@ -59,7 +59,7 @@
         android:layout_toRightOf="@id/hashTag_textview"
         android:background="@drawable/round_corner"
         android:paddingHorizontal="5sp"
-        android:visibility="invisible"
+        android:visibility="gone"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textColor="@color/black"
         android:textSize="11sp" />
