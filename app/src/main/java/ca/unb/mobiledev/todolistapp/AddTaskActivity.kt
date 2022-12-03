@@ -2,10 +2,14 @@ package ca.unb.mobiledev.todolistapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
+import android.widget.CalendarView
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import ca.unb.mobiledev.todolistapp.database.Task
+import ca.unb.mobiledev.todolistapp.MainActivity.Companion.ADD
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AddTaskActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,13 +21,16 @@ class AddTaskActivity : AppCompatActivity() {
         val editText = findViewById<EditText>(R.id.taskEditText)
         val notesText = findViewById<EditText>(R.id.notesEditText)
         val hashTagText = findViewById<EditText>(R.id.hashTagEditText)
-        val dueDateText = findViewById<EditText>(R.id.dueDateEditText)
+        val calendarView = findViewById<CalendarView>(R.id.calendar)
 
         val name = editText.text
         val notes = notesText.text
         val hashTag = hashTagText.text
-        val dueDate = dueDateText.text
+        var dueDate = SimpleDateFormat("MM/dd/yyyy").format(Date(calendarView.date))
 
+        calendarView.setOnDateChangeListener { _, year, month, day ->
+            dueDate = "$month/$day/$year"
+        }
 
         cancelButton.setOnClickListener {
             val intent = Intent(this@AddTaskActivity, MainActivity::class.java)
@@ -33,6 +40,7 @@ class AddTaskActivity : AppCompatActivity() {
 
         saveButton.setOnClickListener {
             val intent = Intent(this@AddTaskActivity, MainActivity::class.java)
+            intent.putExtra("activity", ADD)
             intent.putExtra("name", name.toString())
             intent.putExtra("notes", notes.toString())
             intent.putExtra("hashTag", hashTag.toString())
