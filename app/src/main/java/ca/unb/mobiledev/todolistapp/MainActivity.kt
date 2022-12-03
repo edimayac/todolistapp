@@ -11,8 +11,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.forEach
-import androidx.core.view.get
 import androidx.lifecycle.ViewModelProvider
 import ca.unb.mobiledev.todolistapp.database.Task
 import ca.unb.mobiledev.todolistapp.database.TaskDatabaseAdapter
