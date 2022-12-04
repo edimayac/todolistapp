@@ -32,14 +32,23 @@
         android:hint="HashTag"
         android:padding="20dp" />
 
-    <CalendarView
-        android:id="@+id/calendar"
-        android:layout_below="@id/hashTagEditText"
-        android:background="@color/white"
-        android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </CalendarView>
+            <TextView
+                android:id="@+id/timerText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/hashTagEditText"
+                android:padding="30dp"
+                android:textSize="25dp"
+                android:text="00:00:00"/>
+
+            <CalendarView
+                android:id="@+id/calendar"
+                android:layout_width="wrap_content"
+                android:layout_height="250dp"
+                android:layout_below="@id/timerText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:background="@color/white"></CalendarView>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -64,6 +73,27 @@
             android:layout_below="@id/calendar"
             android:text="Cancel" />
     </LinearLayout>
+
+            <Switch
+                android:id="@+id/timerSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="207dp"
+                android:layout_marginEnd="26dp"
+                android:text="Start" />
+
+            <Button
+                android:id="@+id/resetButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="240dp"
+                android:layout_marginEnd="23dp"
+                android:text="Reset" />
+
         </RelativeLayout>
 
     </ScrollView>
