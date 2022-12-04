@@ -150,46 +150,46 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "Data.db" , null ,1
         db.execSQL(query)
     }
 
-    fun changeNameTable1(replaceWith: String?, locatingVal: String?){
+    fun changeNameTable1(replaceWith: String?, locatingVal: Int?){
         val db= this.writableDatabase
 
-        val query= "UPDATE $table1Name SET $taskName = '$replaceWith' WHERE $taskName = '$locatingVal';"
+        val query= "UPDATE $table1Name SET $taskName = '$replaceWith' WHERE $iDPrimaryKey = '$locatingVal';"
 
         db.execSQL(query)
 
     }
 
-    fun changeNotesTable1(replaceWith: String?, locatingVal: String?){
+    fun changeNotesTable1(replaceWith: String?, locatingVal: Int?){
         val db= this.writableDatabase
 
-        val query= "UPDATE $table1Name SET $taskNotes = '$replaceWith' WHERE $taskName = '$locatingVal';"
+        val query= "UPDATE $table1Name SET $taskNotes = '$replaceWith' WHERE $iDPrimaryKey = '$locatingVal';"
 
         db.execSQL(query)
 
     }
 
-    fun changeTagTable1(replaceWith: String?, locatingVal: String?){
+    fun changeTagTable1(replaceWith: String?, locatingVal: Int?){
         val db= this.writableDatabase
 
-        val query= "UPDATE $table1Name SET $hashTag = '$replaceWith' WHERE $taskName = '$locatingVal';"
+        val query= "UPDATE $table1Name SET $hashTag = '$replaceWith' WHERE $iDPrimaryKey = '$locatingVal';"
 
         db.execSQL(query)
 
     }
 
-    fun changeDueDateTable1(replaceWith: String?, locatingVal: String?){
+    fun changeDueDateTable1(replaceWith: String?, locatingVal: Int?){
         val db= this.writableDatabase
 
-        val query= "UPDATE $table1Name SET $dueDate = '$replaceWith' WHERE $taskName = '$locatingVal';"
+        val query= "UPDATE $table1Name SET $dueDate = '$replaceWith' WHERE $iDPrimaryKey = '$locatingVal';"
 
         db.execSQL(query)
 
     }
 
-    fun changeWorkTimeTable1(replaceWith: Int, locatingVal: String?){
+    fun changeWorkTimeTable1(replaceWith: Int, locatingVal: Int?){
         val db= this.writableDatabase
 
-        val query= "UPDATE $table1Name SET $workTime = $replaceWith WHERE $taskName = '$locatingVal';"
+        val query= "UPDATE $table1Name SET $workTime = $replaceWith WHERE $iDPrimaryKey = '$locatingVal';"
 
         db.execSQL(query)
 

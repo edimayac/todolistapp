@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         taskViewModel = ViewModelProvider(this)[TaskViewModel::class.java]
 
         listView = findViewById(R.id.listView)
-        listView.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
+        listView.choiceMode = ListView.CHOICE_MODE_MULTIPLE
         listView.adapter = taskAdapter
         taskList.addAll(taskViewModel.getAllTasks())
         taskAdapter.notifyDataSetChanged()
@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         add.setOnClickListener {
-            val intent = Intent(this@MainActivity, EditTaskActivity::class.java)
+            val intent = Intent(this@MainActivity, AddTaskActivity::class.java)
             startActivityForResult(intent, 1)
         }
 
@@ -169,26 +169,37 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
             if (resultCode == RESULT_OK) {
                 val newTask = Task.Builder()
-                    .id(data?.getIntExtra("id", 0)!!)
+                    .id(data?.getIntExtra("id", -1)!!)
                     .name(data.getStringExtra("name")!!)
                     .notes(data.getStringExtra("notes")!!)
                     .dueDate(data.getStringExtra("dueDate")!!)
                     .hashTag(data.getStringExtra("hashTag")!!)
-                    .elapsedTime(data.getIntExtra("elapsedTime", 0))
+                    .elapsedTime(data.getIntExtra("elapsedTime", -1))
                     .build()
 
-                if (taskList.contains(newTask)) {
-                    val index = taskList.indexOf(newTask)
-                    val oldTask = taskList[index]
-                    taskViewModel.editTask(newTask, oldTask)
-                    taskList[index] = newTask
-                } else {
-                    newTask.id = taskViewModel.addTask(newTask)
-                    taskList.add(newTask)
-                }
-
-                taskAdapter.notifyDataSetChanged()
-
+                Log.e("new task", data?.getIntExtra("activity", -1).toString())
+                when (data?.getIntExtra("activity", -1)) {
+                   EDIT -> {
+                       taskList.forEach{ task ->
+                           if (task.id == newTask.id) {
+                               task.name = newTask.name
+                               task.notes = newTask.notes
+                               task.dueDate = newTask.dueDate
+                               task.hashTag = newTask.hashTag
+                               task.elapsedTime = newTask.elapsedTime
+                               return@forEach
+                           }
+                       }
+                       taskViewModel.editTask(newTask, newTask.id!!)
+                       taskAdapter.notifyDataSetChanged()
+                   }
+                   ADD -> {
+                       Log.e("new task", newTask.toString())
+                       newTask.id = taskViewModel.addTask(newTask)
+                       taskList.add(newTask)
+                       taskAdapter.notifyDataSetChanged()
+                   }
+               }
             } else if (resultCode == RESULT_CANCELED) {
                 taskAdapter.notifyDataSetChanged()
             }
@@ -229,5 +240,8 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
+    companion object {
+        const val EDIT = 3
+        const val ADD = 2
+    }
 }
