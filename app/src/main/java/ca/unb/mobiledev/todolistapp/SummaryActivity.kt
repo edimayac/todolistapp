@@ -1,6 +1,6 @@
 package ca.unb.mobiledev.todolistapp
 
-import android.content.Context
+
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -17,33 +17,37 @@ class SummaryActivity : AppCompatActivity () {
         binding = ActivitySummaryBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.bottomNavigationView.menu.getItem(1).setChecked(true)
-        bottomNavigationBar(this@SummaryActivity)
+        bottomNavigationBar()
 
 
+        //Remove the back arrow button
+        supportActionBar!!.setHomeButtonEnabled(false)     // Disable the button
+        supportActionBar!!.setDisplayHomeAsUpEnabled(false) // Remove the left caret
+        supportActionBar!!.setDisplayShowHomeEnabled(false) // Remove the icon
     }
 
-    private fun bottomNavigationBar(context: Context){
+    private fun bottomNavigationBar(){
 
         binding.bottomNavigationView.setOnItemSelectedListener{item ->(
 
                 when (item.itemId){
 
                     R.id.summary -> {
-                        val intent = Intent(context,SummaryActivity::class.java)
+                        val intent = Intent(this,SummaryActivity::class.java)
                         intent.putExtra("item",item.itemId)
                         startActivity(intent)
                         finish()
                     }
 
                     R.id.settings -> {
-                        val intent = Intent(context,SettingsActivity::class.java)
+                        val intent = Intent(this,SettingsActivity::class.java)
                         intent.putExtra("item",item.itemId)
                         startActivity(intent)
                         finish()
                     }
 
                     R.id.list -> {
-                        val intent = Intent(context,MainActivity::class.java)
+                        val intent = Intent(this,MainActivity::class.java)
                         intent.putExtra("item",item.itemId)
                         startActivity(intent)
                         finish()

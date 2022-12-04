@@ -2,10 +2,15 @@ package ca.unb.mobiledev.todolistapp
 
 import android.content.Intent
 import android.os.Bundle
+
+import android.os.CountDownTimer
+
 import android.util.Log
+
 import android.widget.Button
 import android.widget.CalendarView
 import android.widget.EditText
+import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
 import ca.unb.mobiledev.todolistapp.MainActivity.Companion.ADD
 import java.text.SimpleDateFormat
@@ -21,7 +26,13 @@ class AddTaskActivity : AppCompatActivity() {
         val editText = findViewById<EditText>(R.id.taskEditText)
         val notesText = findViewById<EditText>(R.id.notesEditText)
         val hashTagText = findViewById<EditText>(R.id.hashTagEditText)
+
+        val dueDateText = findViewById<EditText>(R.id.dueDateEditText)
+        val timerText = findViewById<EditText>(R.id.timerEditText)
+        val timerSwitch = findViewById<Switch>(R.id.timerSwitch)
+
         val calendarView = findViewById<CalendarView>(R.id.calendar)
+
 
         val name = editText.text
         val notes = notesText.text
@@ -49,6 +60,7 @@ class AddTaskActivity : AppCompatActivity() {
             setResult(RESULT_OK, intent)
             finish()
         }
+
 
     }
 }
