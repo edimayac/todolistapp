@@ -12,6 +12,7 @@ import ca.unb.mobiledev.todolistapp.database.Task
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 class EditTaskActivity : AppCompatActivity() {
 
     lateinit var timerSwitch: Switch
@@ -110,7 +111,7 @@ class EditTaskActivity : AppCompatActivity() {
             intent.putExtra("notes", notes.toString())
             intent.putExtra("hashTag", hashTag.toString())
             intent.putExtra("dueDate", dueDate.toString())
-            intent.putExtra("elapsedTime", convertTimeToS(hrEditText, minEditText, secEditText))
+            intent.putExtra("elapsedTime", convertTimeToS())
             setResult(RESULT_OK, intent)
             finish()
         }
@@ -151,40 +152,28 @@ class EditTaskActivity : AppCompatActivity() {
         return hr + min + sec
     }
 
-    private fun convertTimeToS(
-        hrEditText: EditText,
-        minEditText: EditText,
-        secEditText: EditText
-    ): Int {
-        var hour = hrEditText.text.toString()
-        var minute = minEditText.text.toString()
-        var second = secEditText.text.toString()
+    private fun convertTimeToS(): Int {
+        val time = timerText.text.split(":").toTypedArray()
 
+        val hour = time[0].toInt()
+        val minute = time[1].toInt()
+        val second = time[2].toInt()
 
-        if(hour.isEmpty())
-            hour = "0"
-        if(minute.isEmpty())
-            minute = "0"
-        if(second.isEmpty())
-            second = "0"
+        val s = second + 60 * minute + 3600 * hour
 
-
-        val hr = hour.toInt() * 3600
-        val min = minute.toInt() * 60
-        val sec = second.toInt() * 1
-
-        return hr + min + sec
+        Log.v("Elapsed Time", s.toString())
+        return s
     }
 
     private fun convertSecondsToHours(
         totalSecs: Int
     ): String {
+        Log.v("Time", totalSecs.toString())
+        val hours = totalSecs / 3600
+        val minutes = (totalSecs % 3600) / 60
+        val seconds = totalSecs % 60
 
-        val hours = totalSecs / 3600;
-        val minutes = (totalSecs % 3600) / 60;
-        val seconds = totalSecs % 60;
-
-        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }
 
     private fun pauseTimer() {
