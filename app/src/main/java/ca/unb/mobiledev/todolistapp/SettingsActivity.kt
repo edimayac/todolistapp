@@ -20,6 +20,10 @@ class SettingsActivity : AppCompatActivity () {
         binding.bottomNavigationView.menu.getItem(2).setChecked(true)
         bottomNavigationBar(this@SettingsActivity)
 
+        //Remove the back arrow button
+        supportActionBar!!.setHomeButtonEnabled(false)     // Disable the button
+        supportActionBar!!.setDisplayHomeAsUpEnabled(false) // Remove the left caret
+        supportActionBar!!.setDisplayShowHomeEnabled(false) // Remove the icon
 
 
 

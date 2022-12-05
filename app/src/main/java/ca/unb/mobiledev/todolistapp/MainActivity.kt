@@ -30,10 +30,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+
         // Bottom Navigation Bar
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         bottomNavigationBar()
+
         
 
         /*
@@ -75,6 +78,7 @@ class MainActivity : AppCompatActivity() {
         val delete = findViewById<Button>(R.id.delete)
         val add = findViewById<Button>(R.id.addTaskBtn)
         val addTaskEditText = findViewById<EditText>(R.id.addTaskEditText)
+
 
         addButton.setOnClickListener {
             //Pull down keyboard
