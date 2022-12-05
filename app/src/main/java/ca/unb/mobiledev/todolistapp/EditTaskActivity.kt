@@ -39,6 +39,7 @@ class EditTaskActivity : AppCompatActivity() {
         val notesText = findViewById<EditText>(R.id.notesEditText)
         val hashTagText = findViewById<EditText>(R.id.hashTagEditText)
         val calendarView = findViewById<CalendarView>(R.id.calendar)
+
         minEditText = findViewById(R.id.minEditText)
         secEditText = findViewById(R.id.secEditText)
         hrEditText = findViewById(R.id.hourEditText)
@@ -60,13 +61,14 @@ class EditTaskActivity : AppCompatActivity() {
         editText.setText(task.name)
         notesText.setText(task.notes)
         hashTagText.setText(task.hashTag)
+        timerText.text = convertSecondsToHours(task.elapsedTime!!)
 
         val name = editText.text
         val notes = notesText.text
         val hashTag = hashTagText.text
         var dueDate = SimpleDateFormat("MM/dd/yyyy").format(Date(calendarView.date))
 
-        timerSwitch.setOnCheckedChangeListener{_,isChecked ->
+        timerSwitch.setOnCheckedChangeListener{ _, _ ->
             if ((isRunning)) {
                 Toast.makeText(this,"PAUSE", Toast.LENGTH_SHORT).show()
                 pauseTimer()
@@ -93,7 +95,6 @@ class EditTaskActivity : AppCompatActivity() {
 
         calendarView.setOnDateChangeListener { view, year, month, day ->
            dueDate = "$month/$day/$year"
-            Log.v("Calendar", dueDate.toString())
         }
 
         cancelButton.setOnClickListener {
@@ -109,7 +110,7 @@ class EditTaskActivity : AppCompatActivity() {
             intent.putExtra("notes", notes.toString())
             intent.putExtra("hashTag", hashTag.toString())
             intent.putExtra("dueDate", dueDate.toString())
-            intent.putExtra("elapsedTime", 0)
+            intent.putExtra("elapsedTime", convertTimeToS(hrEditText, minEditText, secEditText))
             setResult(RESULT_OK, intent)
             finish()
         }
@@ -148,6 +149,42 @@ class EditTaskActivity : AppCompatActivity() {
         val sec = second.toLong() * 1000L
 
         return hr + min + sec
+    }
+
+    private fun convertTimeToS(
+        hrEditText: EditText,
+        minEditText: EditText,
+        secEditText: EditText
+    ): Int {
+        var hour = hrEditText.text.toString()
+        var minute = minEditText.text.toString()
+        var second = secEditText.text.toString()
+
+
+        if(hour.isEmpty())
+            hour = "0"
+        if(minute.isEmpty())
+            minute = "0"
+        if(second.isEmpty())
+            second = "0"
+
+
+        val hr = hour.toInt() * 3600
+        val min = minute.toInt() * 60
+        val sec = second.toInt() * 1
+
+        return hr + min + sec
+    }
+
+    private fun convertSecondsToHours(
+        totalSecs: Int
+    ): String {
+
+        val hours = totalSecs / 3600;
+        val minutes = (totalSecs % 3600) / 60;
+        val seconds = totalSecs % 60;
+
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
     private fun pauseTimer() {
