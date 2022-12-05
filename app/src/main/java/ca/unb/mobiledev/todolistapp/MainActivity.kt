@@ -29,15 +29,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-
         // Bottom Navigation Bar
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         bottomNavigationBar()
-
-        
 
         /*
             Set and Initialize Database Adapter
@@ -48,17 +43,21 @@ class MainActivity : AppCompatActivity() {
         listView = findViewById(R.id.listView)
         listView.choiceMode = ListView.CHOICE_MODE_MULTIPLE
         listView.adapter = taskAdapter
+
         taskList.addAll(taskViewModel.getAllTasks())
         taskAdapter.notifyDataSetChanged()
 
+        // Comment out create dummy data and comment the two lines above
+//        createDummyData()
+
         // Adding the toast message to the list when an item on the list is pressed
         listView.setOnItemClickListener { _, _, i, _ ->
-            Log.e("Task.isChecked", "You Selected the item --> " + taskList[i].isChecked)
+//            Log.e("Task.isChecked", "You Selected the item --> " + taskList[i].isChecked)
         }
 
         listView.onItemLongClickListener =
             OnItemLongClickListener { _, view, pos, _ ->
-                Log.e("long clicked", "pos: $pos")
+//                Log.e("long clicked", "pos: $pos")
                 optionsMenu(view, pos)
                 true
             }
@@ -131,6 +130,53 @@ class MainActivity : AppCompatActivity() {
             //Reset Checkboxes
             checkedTaskPositions.clear()
         }
+    }
+
+    private fun createDummyData() {
+        val t1 = Task.Builder()
+            .name("Task1")
+            .notes("Task1 Notes")
+            .hashTag("#Task1")
+            .elapsedTime(60)
+            .build()
+        val t2 = Task.Builder()
+            .name("Task2")
+            .notes("Task2 Notes")
+            .hashTag("#Task2")
+            .elapsedTime(30)
+            .build()
+        val t3 = Task.Builder()
+            .name("Task3")
+            .notes("Task3 Notes")
+            .hashTag("#Task3")
+            .elapsedTime(60)
+            .build()
+        val t4 = Task.Builder()
+            .name("Task4")
+            .notes("Task4 Notes")
+            .hashTag("#Task2")
+            .elapsedTime(30)
+            .build()
+        val t5 = Task.Builder()
+            .name("Task5")
+            .notes("Task5 Notes")
+            .hashTag("#Task1")
+            .elapsedTime(20)
+            .build()
+
+        t1.id = taskViewModel.addTask(t1)
+        t2.id = taskViewModel.addTask(t2)
+        t3.id = taskViewModel.addTask(t3)
+        t4.id = taskViewModel.addTask(t4)
+        t5.id = taskViewModel.addTask(t5)
+
+        taskList.add(t1)
+        taskList.add(t2)
+        taskList.add(t3)
+        taskList.add(t4)
+        taskList.add(t5)
+
+        taskAdapter.notifyDataSetChanged()
     }
 
     private fun optionsMenu(view: View, pos: Int) {

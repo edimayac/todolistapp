@@ -112,10 +112,11 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "Data.db" , null ,1
         cursor.close()
         return arraylist
     }
+
     fun findByTag(str: String) : ArrayList<Task>{
         val arraylist = ArrayList<Task>()
         val db = this.readableDatabase
-        val selectQuery = "SELECT * FROM $table1Name WHERE $taskNotes = '$str' ORDER BY $taskName ;"
+        val selectQuery = "SELECT * FROM $table1Name WHERE $hashTag = '$str' ORDER BY $taskName ;"
         val cursor = db.rawQuery(selectQuery, null)
 
 
@@ -134,6 +135,21 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "Data.db" , null ,1
         }
         cursor.close()
         return arraylist
+    }
+
+    fun getElapsedTimeByTag(str: String): Int {
+        var sum = 0
+        val db = this.readableDatabase
+        val selectQuery = "SELECT $workTime FROM $table1Name WHERE $hashTag = '$str';"
+        val cursor = db.rawQuery(selectQuery, null)
+
+        if (cursor.moveToFirst()){
+            do {
+                sum += cursor.getInt(0)
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return sum
     }
 
     fun deleteFromTable1(taskIdl: Int){
