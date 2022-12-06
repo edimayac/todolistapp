@@ -19,6 +19,8 @@ class EditTaskActivity : AppCompatActivity() {
 
     lateinit var timerSwitch: Switch
     lateinit var resetButton: Button
+    lateinit var saveButton: Button
+    lateinit var cancelButton: Button
     lateinit var timerText: TextView
     lateinit var countDownTimer: CountDownTimer
     lateinit var hrEditText: EditText
@@ -29,6 +31,7 @@ class EditTaskActivity : AppCompatActivity() {
     var isRunning: Boolean = false
     var isPaused: Boolean = false
     var timeInMs = 0L
+    var elapsedTime = 0
     var startTime = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,12 +40,19 @@ class EditTaskActivity : AppCompatActivity() {
 
         val task = Task.Builder().build()
 
-        val cancelButton = findViewById<Button>(R.id.cancelButton)
-        val saveButton = findViewById<Button>(R.id.saveButton)
+        cancelButton = findViewById(R.id.cancelButton)
+        saveButton = findViewById(R.id.saveButton)
         val editText = findViewById<EditText>(R.id.taskEditText)
         val notesText = findViewById<EditText>(R.id.notesEditText)
         val hashTagText = findViewById<EditText>(R.id.hashTagEditText)
         val calendarView = findViewById<CalendarView>(R.id.calendar)
+        minEditText = findViewById(R.id.minEditText)
+        secEditText = findViewById(R.id.secEditText)
+        hrEditText = findViewById(R.id.hourEditText)
+        timerText = findViewById(R.id.timerText)
+        resetButton = findViewById(R.id.resetButton)
+        timerSwitch = findViewById(R.id.timerSwitch)
+
 
         minEditText = findViewById(R.id.minEditText)
         secEditText = findViewById(R.id.secEditText)
@@ -72,7 +82,7 @@ class EditTaskActivity : AppCompatActivity() {
         val hashTag = hashTagText.text
         var dueDate = SimpleDateFormat("MM/dd/yyyy").format(Date(calendarView.date))
 
-        timerSwitch.setOnCheckedChangeListener{ _, _ ->
+        timerSwitch.setOnCheckedChangeListener{_,isChecked ->
             if ((isRunning)) {
                 Toast.makeText(this,"PAUSE", Toast.LENGTH_SHORT).show()
                 pauseTimer()
@@ -88,7 +98,8 @@ class EditTaskActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(this, "START", Toast.LENGTH_SHORT).show()
                     timeInMs = convertTimeToMs(hrEditText, minEditText, secEditText)
-                    startTime = convertTimeToSs(hrEditText, minEditText, secEditText)
+                    startInMs = timeInMs
+                    //startTime = convertTimeToSs(hrEditText, minEditText, secEditText)
 
                     //Pull down keyboard
                     val mgr: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -102,7 +113,6 @@ class EditTaskActivity : AppCompatActivity() {
             }
 
 //        }
-
         resetButton.setOnClickListener{resetTimer()}
 
         calendarView.setOnDateChangeListener { _, year, month, day ->
@@ -122,18 +132,19 @@ class EditTaskActivity : AppCompatActivity() {
             intent.putExtra("notes", notes.toString())
             intent.putExtra("hashTag", hashTag.toString())
             intent.putExtra("dueDate", dueDate.toString())
-            intent.putExtra("elapsedTime", convertTimeStringToSeconds())
+            intent.putExtra("elapsedTime", elapsedTime)
+            //intent.putExtra("elapsedTime", convertTimeStringToSeconds())
             setResult(RESULT_OK, intent)
             finish()
         }
     }
 
     private fun resetTimer() {
-        timeInMs = startInMs
+        timeInMs = 0L
         updateTextUI()
         resetButton.visibility = View.INVISIBLE
         isPaused = false
-//        timerSwitch.isChecked = false
+        timerSwitch.isChecked = false
         timerSwitch.text = "START"
         isRunning = false
     }
@@ -220,6 +231,11 @@ class EditTaskActivity : AppCompatActivity() {
         isRunning = false
         isPaused = true
         resetButton.visibility = View.VISIBLE
+        saveButton.visibility = View.VISIBLE
+        cancelButton.visibility = View.VISIBLE
+//        Toast.makeText(this,timeInMs.toInt().toString(),Toast.LENGTH_SHORT).show()
+        elapsedTime = ((startInMs - timeInMs)/1000).toInt()
+
         clearTimeInput()
     }
 
@@ -240,6 +256,8 @@ class EditTaskActivity : AppCompatActivity() {
         isRunning = true
         timerSwitch.text = "PAUSE"
         resetButton.visibility = View.INVISIBLE
+        saveButton.visibility = View.INVISIBLE
+        cancelButton.visibility = View.INVISIBLE
         clearTimeInput()
 
     }
@@ -255,8 +273,8 @@ class EditTaskActivity : AppCompatActivity() {
         val hour = (timeInMs/1000) % 86400 / 3600
         val minute = (timeInMs / 1000) % 86400 %3600 / 60
         val seconds = (timeInMs / 1000) % 86400 %3600 %60
-
         timerText.text = String.format("%02d:%02d:%02d",hour,minute,seconds)
+
     }
 
 
