@@ -31,24 +31,25 @@
                 android:layout_below="@id/notesEditText"
                 android:hint="HashTag"
                 android:padding="18dp" />
-                
+
             <EditText
                 android:id="@+id/hourEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/hashTagEditText"
-                android:padding="18dp"
                 android:hint="hr"
-                android:inputType="phone"/>
+                android:inputType="phone"
+                android:padding="18dp" />
+
             <EditText
                 android:id="@+id/minEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/hashTagEditText"
                 android:layout_toRightOf="@id/hourEditText"
-                android:padding="18dp"
                 android:hint="min"
-                android:inputType="phone"/>
+                android:inputType="phone"
+                android:padding="18dp" />
 
             <EditText
                 android:id="@+id/secEditText"
@@ -68,7 +69,7 @@
                 android:gravity="left"
                 android:padding="15dp"
                 android:text="00:00:00"
-                android:textSize="20dp"/>
+                android:textSize="20dp" />
 
             <CalendarView
                 android:id="@+id/calendar"

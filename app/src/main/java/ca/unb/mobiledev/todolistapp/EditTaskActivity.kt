@@ -17,22 +17,26 @@ import java.util.*
 
 class EditTaskActivity : AppCompatActivity() {
 
-    lateinit var timerSwitch: Switch
-    lateinit var resetButton: Button
-    lateinit var saveButton: Button
-    lateinit var cancelButton: Button
-    lateinit var timerText: TextView
-    lateinit var countDownTimer: CountDownTimer
-    lateinit var hrEditText: EditText
-    lateinit var minEditText: EditText
-    lateinit var secEditText: EditText
+    private lateinit var timerSwitch: Switch
+    private lateinit var resetButton: Button
+    private lateinit var saveButton: Button
+    private lateinit var cancelButton: Button
+    private lateinit var timerText: TextView
+    private lateinit var countDownTimer: CountDownTimer
+    private lateinit var hrEditText: EditText
+    private lateinit var minEditText: EditText
+    private lateinit var secEditText: EditText
+    private lateinit var editText: EditText
+    private lateinit var notesText: EditText
+    private lateinit var hashTagText: EditText
+    private lateinit var calendarView: CalendarView
 
-    var startInMs = 0L
-    var isRunning: Boolean = false
-    var isPaused: Boolean = false
-    var timeInMs = 0L
-    var elapsedTime = 0
-    var startTime = 0
+    private var startInMs = 0L
+    private var isRunning: Boolean = false
+    private var isPaused: Boolean = false
+    private var timeInMs = 0L
+    private var elapsedTime = 0
+    private var startTime = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,10 +46,10 @@ class EditTaskActivity : AppCompatActivity() {
 
         cancelButton = findViewById(R.id.cancelButton)
         saveButton = findViewById(R.id.saveButton)
-        val editText = findViewById<EditText>(R.id.taskEditText)
-        val notesText = findViewById<EditText>(R.id.notesEditText)
-        val hashTagText = findViewById<EditText>(R.id.hashTagEditText)
-        val calendarView = findViewById<CalendarView>(R.id.calendar)
+        editText = findViewById(R.id.taskEditText)
+        notesText = findViewById(R.id.notesEditText)
+        hashTagText = findViewById(R.id.hashTagEditText)
+        calendarView = findViewById(R.id.calendar)
         minEditText = findViewById(R.id.minEditText)
         secEditText = findViewById(R.id.secEditText)
         hrEditText = findViewById(R.id.hourEditText)
@@ -75,14 +79,14 @@ class EditTaskActivity : AppCompatActivity() {
         editText.setText(task.name)
         notesText.setText(task.notes)
         hashTagText.setText(task.hashTag)
-        //timerText.text = convertSecondsToHours(task.elapsedTime!!)
+//        timerText.text = convertSecondsToHours(task.elapsedTime!!)
 
         val name = editText.text
         val notes = notesText.text
         val hashTag = hashTagText.text
         var dueDate = SimpleDateFormat("MM/dd/yyyy").format(Date(calendarView.date))
 
-        timerSwitch.setOnCheckedChangeListener{_,isChecked ->
+        timerSwitch.setOnCheckedChangeListener{ _, _ ->
             if ((isRunning)) {
                 Toast.makeText(this,"PAUSE", Toast.LENGTH_SHORT).show()
                 pauseTimer()
@@ -99,7 +103,7 @@ class EditTaskActivity : AppCompatActivity() {
                     Toast.makeText(this, "START", Toast.LENGTH_SHORT).show()
                     timeInMs = convertTimeToMs(hrEditText, minEditText, secEditText)
                     startInMs = timeInMs
-                    //startTime = convertTimeToSs(hrEditText, minEditText, secEditText)
+//                    startTime = convertTimeToSs(hrEditText, minEditText, secEditText)
 
                     //Pull down keyboard
                     val mgr: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -133,7 +137,7 @@ class EditTaskActivity : AppCompatActivity() {
             intent.putExtra("hashTag", hashTag.toString())
             intent.putExtra("dueDate", dueDate.toString())
             intent.putExtra("elapsedTime", elapsedTime)
-            //intent.putExtra("elapsedTime", convertTimeStringToSeconds())
+//            intent.putExtra("elapsedTime", convertTimeStringToSeconds())
             setResult(RESULT_OK, intent)
             finish()
         }
@@ -147,6 +151,8 @@ class EditTaskActivity : AppCompatActivity() {
         timerSwitch.isChecked = false
         timerSwitch.text = "START"
         isRunning = false
+        startInMs = 0
+        elapsedTime = 0
     }
 
     private fun convertTimeToMs(
@@ -235,7 +241,6 @@ class EditTaskActivity : AppCompatActivity() {
         cancelButton.visibility = View.VISIBLE
 //        Toast.makeText(this,timeInMs.toInt().toString(),Toast.LENGTH_SHORT).show()
         elapsedTime = ((startInMs - timeInMs)/1000).toInt()
-
         clearTimeInput()
     }
 

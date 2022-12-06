@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.os.CountDownTimer
 
 import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isInvisible
 import ca.unb.mobiledev.todolistapp.MainActivity.Companion.ADD
 import java.text.SimpleDateFormat
 import java.util.*
@@ -22,30 +24,19 @@ class AddTaskActivity : AppCompatActivity() {
         val editText = findViewById<EditText>(R.id.taskEditText)
         val notesText = findViewById<EditText>(R.id.notesEditText)
         val hashTagText = findViewById<EditText>(R.id.hashTagEditText)
-
-//        val dueDateText = findViewById<EditText>(R.id.dueDateEditText)
-//        val timerText = findViewById<EditText>(R.id.timerEditText)
-        val timerSwitch = findViewById<Switch>(R.id.timerSwitch)
-
         val calendarView = findViewById<CalendarView>(R.id.calendar)
-        val timerSwitch = findViewById<Switch>(R.id.timerSwitch)
 
+        findViewById<Switch>(R.id.timerSwitch).visibility = View.GONE
+        findViewById<TextView>(R.id.timerText).visibility = View.GONE
+        findViewById<EditText>(R.id.hourEditText).visibility = View.GONE
+        findViewById<EditText>(R.id.minEditText).visibility = View.GONE
+        findViewById<EditText>(R.id.secEditText).visibility = View.GONE
+        findViewById<Button>(R.id.resetButton).visibility = View.GONE
 
         val name = editText.text
         val notes = notesText.text
         val hashTag = hashTagText.text
         var dueDate = SimpleDateFormat("MM/dd/yyyy").format(Date(calendarView.date))
-
-        timerSwitch.setOnCheckedChangeListener{_,isChecked ->
-            if(isChecked) {
-                timerSwitch.text = "PAUSE"
-                Toast.makeText(this, "START", Toast.LENGTH_SHORT).show()
-            }
-            else {
-                timerSwitch.text = "START"
-                Toast.makeText(this, "PAUSE", Toast.LENGTH_SHORT).show()
-            }
-        }
 
         calendarView.setOnDateChangeListener { _, year, month, day ->
             dueDate = "$month/$day/$year"
