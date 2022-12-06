@@ -24,12 +24,6 @@ class SettingsActivity : AppCompatActivity () {
         supportActionBar!!.setDisplayShowHomeEnabled(false) // Remove the icon
 
 
-        //Remove the back arrow button
-        supportActionBar!!.setHomeButtonEnabled(false)     // Disable the button
-        supportActionBar!!.setDisplayHomeAsUpEnabled(false) // Remove the left caret
-        supportActionBar!!.setDisplayShowHomeEnabled(false) // Remove the icon
-
-
 
     }
 
