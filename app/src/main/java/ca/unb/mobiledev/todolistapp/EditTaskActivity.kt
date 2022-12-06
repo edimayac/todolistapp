@@ -72,7 +72,7 @@ class EditTaskActivity : AppCompatActivity() {
 
         timerSwitch.setOnCheckedChangeListener{_,isChecked ->
             if ((isRunning)) {
-//                Toast.makeText(this,"PAUSE", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,"PAUSE", Toast.LENGTH_SHORT).show()
                 pauseTimer()
             } else if(isPaused){
                 Toast.makeText(this, "RESUME", Toast.LENGTH_SHORT).show()
@@ -124,7 +124,7 @@ class EditTaskActivity : AppCompatActivity() {
         updateTextUI()
         resetButton.visibility = View.INVISIBLE
         isPaused = false
-//        timerSwitch.isChecked = false
+        timerSwitch.isChecked = false
         timerSwitch.text = "START"
         isRunning = false
     }
@@ -162,8 +162,8 @@ class EditTaskActivity : AppCompatActivity() {
         resetButton.visibility = View.VISIBLE
         saveButton.visibility = View.VISIBLE
         cancelButton.visibility = View.VISIBLE
-        Toast.makeText(this,timeInMs.toInt().toString(),Toast.LENGTH_SHORT).show()
-        elapsedTime = (startInMs - timeInMs).toInt()
+//        Toast.makeText(this,timeInMs.toInt().toString(),Toast.LENGTH_SHORT).show()
+        elapsedTime = ((startInMs - timeInMs)/1000).toInt()
 
         clearTimeInput()
 
