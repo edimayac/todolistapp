@@ -9,7 +9,8 @@
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/idBarChart"
         android:layout_width="match_parent"
-        android:layout_height="3in" />
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNavigationView" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
