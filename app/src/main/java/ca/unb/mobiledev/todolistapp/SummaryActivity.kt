@@ -77,6 +77,7 @@ class SummaryActivity : AppCompatActivity () {
         barChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
 
         barChart.setDrawGridBackground(false)
+//        barChart.xAxis.setLabelCount(xAxisLabel.size+1, true)
         barChart.axisLeft.isEnabled = false
         barChart.axisRight.isEnabled = false
         barChart.description.isEnabled = false

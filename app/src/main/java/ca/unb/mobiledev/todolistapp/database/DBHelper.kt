@@ -205,7 +205,10 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "Data.db" , null ,1
     fun changeWorkTimeTable1(replaceWith: Int, locatingVal: Int?){
         val db= this.writableDatabase
 
-        val query= "UPDATE $table1Name SET $workTime = $replaceWith WHERE $iDPrimaryKey = '$locatingVal';"
+        val previousTime = selectFromTable1(locatingVal!!)!!.elapsedTime
+        val addedTime = replaceWith + previousTime!!
+
+        val query= "UPDATE $table1Name SET $workTime = $addedTime WHERE $iDPrimaryKey = '$locatingVal';"
 
         db.execSQL(query)
 
