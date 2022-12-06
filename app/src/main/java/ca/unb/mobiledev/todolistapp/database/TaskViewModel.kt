@@ -1,6 +1,7 @@
 package ca.unb.mobiledev.todolistapp.database
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 
 class TaskViewModel(application: Application) : AndroidViewModel(application) {
@@ -44,5 +45,13 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
         dbHelper.changeTagTable1(newTask.hashTag, id)
         dbHelper.changeWorkTimeTable1(newTask.elapsedTime!!, id)
         dbHelper.changeDueDateTable1(newTask.dueDate, id)
+    }
+
+    fun getAllTags(): ArrayList<String>{
+        return dbHelper.listTags()
+    }
+
+    fun getElapsedTimeByTag(tag: String): Int {
+        return dbHelper.getElapsedTimeByTag(tag)
     }
 }

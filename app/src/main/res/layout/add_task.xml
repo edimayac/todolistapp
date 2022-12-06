@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Task"
-        android:padding="20dp" />
+        android:padding="18dp" />
 
     <EditText
         android:id="@+id/notesEditText"
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/taskEditText"
         android:hint="Notes"
-        android:padding="20dp" />
+        android:padding="18dp" />
 
     <EditText
         android:id="@+id/hashTagEditText"
@@ -30,48 +30,57 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/notesEditText"
         android:hint="HashTag"
-        android:padding="20dp" />
+        android:padding="18dp" />
 
-    <CalendarView
-        android:id="@+id/calendar"
-        android:layout_below="@id/hashTagEditText"
+            <EditText
+                android:id="@+id/hourEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/hashTagEditText"
+                android:padding="18dp"
+                android:hint="hr"
+                android:inputType="phone"/>
+            <EditText
+                android:id="@+id/minEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/hashTagEditText"
+                android:layout_toRightOf="@id/hourEditText"
+                android:padding="18dp"
+                android:hint="min"
+                android:inputType="phone"/>
 
-        android:hint="Due Date"
-        android:padding="20dp" />
+            <EditText
+                android:id="@+id/secEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/hashTagEditText"
+                android:layout_toRightOf="@id/minEditText"
+                android:hint="sec"
+                android:inputType="phone"
+                android:padding="18dp" />
 
-    <EditText
-        android:id="@+id/timerEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="258dp"
-        android:hint="Timer"
-        android:padding="20dp" />
+            <TextView
+                android:id="@+id/timerText"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/minEditText"
+                android:gravity="left"
+                android:padding="15dp"
+                android:text="00:00:00"
+                android:textSize="20dp"/>
 
-    <Switch
-        android:id="@+id/timerSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="321dp"
-        android:layout_marginTop="273dp"
-        android:layout_marginEnd="2dp"
-        android:textOn="Pause"
-        android:textOff="Start"/>
+            <CalendarView
+                android:id="@+id/calendar"
+                android:layout_width="336dp"
+                android:layout_height="224dp"
+                android:layout_below="@id/timerText"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="41dp"
+                android:background="@color/white"></CalendarView>
 
-    <Button
-        android:id="@+id/cancelButton"
-
-        android:background="@color/white"
-        android:layout_centerHorizontal="true"
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </CalendarView>
-
-    <LinearLayout
+            <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -84,7 +93,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/calendar"
             android:layout_marginHorizontal="10dp"
-            android:text="Save" />
+            android:text="Save"
+            android:visibility="visible"/>
 
         <Button
             android:id="@+id/cancelButton"
@@ -92,8 +102,35 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_below="@id/calendar"
-            android:text="Cancel" />
+            android:text="Cancel"
+            android:visibility="visible"/>
     </LinearLayout>
+
+            <Switch
+                android:id="@+id/timerSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/hashTagEditText"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="19dp"
+                android:layout_marginEnd="34dp"
+                android:text = "START"/>
+
+            <Button
+                android:id="@+id/resetButton"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_below="@+id/timerSwitch"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="236dp"
+                android:layout_marginEnd="34dp"
+                android:backgroundTint="#8A8A8A"
+                android:shadowColor="#858181"
+                android:text="Reset"
+                android:textColorHighlight="#CACACA" />
+
         </RelativeLayout>
 
     </ScrollView>

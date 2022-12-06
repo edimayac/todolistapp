@@ -16,6 +16,7 @@
         <entry key="app/src/main/res/drawable/round_corner.xml" value="0.1975" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/activity_scrolling.xml" value="0.28229166666666666" />
+        <entry key="app/src/main/res/layout/activity_summary.xml" value="0.24583155194527576" />
         <entry key="app/src/main/res/layout/add_task.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/list_layout.xml" value="0.2954253954681488" />
         <entry key="app/src/main/res/layout/popup_menu.xml" value="0.2640625" />

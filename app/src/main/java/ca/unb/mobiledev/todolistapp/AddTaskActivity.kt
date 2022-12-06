@@ -27,8 +27,8 @@ class AddTaskActivity : AppCompatActivity() {
         val notesText = findViewById<EditText>(R.id.notesEditText)
         val hashTagText = findViewById<EditText>(R.id.hashTagEditText)
 
-        val dueDateText = findViewById<EditText>(R.id.dueDateEditText)
-        val timerText = findViewById<EditText>(R.id.timerEditText)
+//        val dueDateText = findViewById<EditText>(R.id.dueDateEditText)
+//        val timerText = findViewById<EditText>(R.id.timerEditText)
         val timerSwitch = findViewById<Switch>(R.id.timerSwitch)
 
         val calendarView = findViewById<CalendarView>(R.id.calendar)
